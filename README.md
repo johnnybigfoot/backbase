@@ -1,4 +1,4 @@
-# Selenide + Allure + JUnit example
+# Backbase UI tests
 
 ## To run tests and generate Allure report:
 
