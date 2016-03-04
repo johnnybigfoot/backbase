@@ -32,6 +32,10 @@ public class LandingBackbase {
     private SelenideElement forgotPasswordLink;
     @FindBy(xpath = "//div[@class='default bp-container bb-simple-tabs-container bb-simple-tabs-container-4']")
     private SelenideElement forgotPasswordForm;
+    @FindBy(name = "email")
+    private SelenideElement forgotPasswordFormEmailField;
+    @FindBy(xpath = "//button[@class='btn btn-primary' and text()='Restore']")
+    private SelenideElement forgotPasswordFormRestoreBtn;
 
     public void login(String username, String pass, boolean stayLoggedIn) {
         loginLink.click();

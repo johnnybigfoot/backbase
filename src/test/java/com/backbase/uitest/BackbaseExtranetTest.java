@@ -51,6 +51,8 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getLoginForm().shouldHave(Condition.hasText("The Username or Password you entered is not correct."));
         landingBackbase.getForgotPasswordLink().click();
         landingBackbase.getForgotPasswordForm().has(Condition.visible);
+        landingBackbase.getForgotPasswordFormEmailField().setValue("test@ukr.net");
+        landingBackbase.getForgotPasswordFormRestoreBtn().click();
     }
 
 
