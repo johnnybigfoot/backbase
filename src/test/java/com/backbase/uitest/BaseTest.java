@@ -7,6 +7,6 @@ import com.backbase.utils.Config;
  */
 public class BaseTest {
     String backbaseUrl = Config.getProperty("baseUrl");
-    int driverTimout = Integer.parseInt(Config.getProperty("timeout"));
-    String driver = Config.getProperty("driver");
+    int driverTimeoutInSeconds = Integer.parseInt(Config.getProperty("timeout"));
+    String browserName = Config.getProperty("driver");
 }
