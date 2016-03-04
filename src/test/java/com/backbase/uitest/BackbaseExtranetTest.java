@@ -2,9 +2,7 @@ package com.backbase.uitest;
 
 import com.backbase.uitests.pages.LandingBackbase;
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Configuration.*;
@@ -15,8 +13,8 @@ public class BackbaseExtranetTest extends BaseTest {
     private static final String companyUserName = "mtv1@test.com";
     private static final String companyUserPassword = "password1";
 
-    @Rule
-    public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
+//    @Rule
+//    public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
 
     @Before
     public void overrideSelenideConfig() {

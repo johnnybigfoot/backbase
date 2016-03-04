@@ -43,6 +43,5 @@ public class LandingBackbase {
         passwordField.sendKeys(pass);
         rememberMeCheckBox.setSelected(stayLoggedIn);
         logInBtn.click();
-
     }
 }
