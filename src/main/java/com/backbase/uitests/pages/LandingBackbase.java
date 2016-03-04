@@ -26,13 +26,15 @@ public class LandingBackbase {
     private SelenideElement userProfileSection;
     @FindBy(css = ".mbb-widget-login-form")
     private SelenideElement loginForm;
+    @FindBy(xpath = "//a[@class='user-profile-mini-display dropdown-toggle']")
+    private SelenideElement userProfileMenu;
     @FindBy(css = "label.error")
     private ElementsCollection errorLabel;
     @FindBy(xpath = "//p[@class='have-account']/a[@href='#forgot-password']")
     private SelenideElement forgotPasswordLink;
     @FindBy(xpath = "//div[@class='default bp-container bb-simple-tabs-container bb-simple-tabs-container-4']")
     private SelenideElement forgotPasswordForm;
-    @FindBy(name = "email")
+    @FindBy(xpath = "//h2[text()='Reset Password']/following-sibling::input[@id='email']")
     private SelenideElement forgotPasswordFormEmailField;
     @FindBy(xpath = "//button[@class='btn btn-primary' and text()='Restore']")
     private SelenideElement forgotPasswordFormRestoreBtn;

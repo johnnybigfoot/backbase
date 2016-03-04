@@ -35,10 +35,11 @@ public class BackbaseExtranetTest extends BaseTest {
 //    $("#ires .g").shouldHave(text("selenide.org"));
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(companyUserName, companyUserPassword, false);
+        landingBackbase.getUserProfileMenu().has(Condition.visible);
     }
 
     @Test
-    public void testLoginWithEmptyFieldsShouldFail() {
+    public void testLoginShouldFail() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.getLoginLink().click();
         landingBackbase.getLogInBtn().click();
@@ -49,9 +50,10 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getLoginForm().shouldHave(Condition.hasText("The Username or Password you entered is not correct."));
         landingBackbase.getForgotPasswordLink().click();
         landingBackbase.getForgotPasswordForm().has(Condition.visible);
+        landingBackbase.getForgotPasswordFormEmailField().has(Condition.enabled);
+        landingBackbase.getForgotPasswordFormEmailField().click();
         landingBackbase.getForgotPasswordFormEmailField().setValue("test@ukr.net");
         landingBackbase.getForgotPasswordFormRestoreBtn().click();
+        landingBackbase.getForgotPasswordForm().shouldHave(Condition.hasText("No user data found for test@ukr.net"));
     }
-
-
 }
