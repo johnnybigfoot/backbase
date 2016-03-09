@@ -1,5 +1,6 @@
 package com.backbase.uitests.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import lombok.Getter;
@@ -38,6 +39,20 @@ public class LandingBackbase {
     private SelenideElement forgotPasswordFormEmailField;
     @FindBy(xpath = "//button[@class='btn btn-primary' and text()='Restore']")
     private SelenideElement forgotPasswordFormRestoreBtn;
+    @FindBy(xpath = "//span[@class='display-name']")
+    private SelenideElement spanDisplayName;
+    @FindBy(xpath = "//a[@href='#login' and text()='Log In Here!']")
+    private SelenideElement logInHereLink;
+    @FindBy(xpath = "//a[@href='#sign-up' and text()='Sign Up here!']")
+    private SelenideElement signUpInHereLink;
+    @FindBy(xpath = "//a[@role='button' and @href='/demos']")
+    private SelenideElement demosLink;
+    @FindBy(xpath = "//a[@href='/demos/videos' and text()='Videos']")
+    private SelenideElement demosLinkVideoSection;
+    @FindBy(xpath = "//div[@class='bp-g-model']")
+    private SelenideElement currentSectionDiv;
+    @FindBy(xpath = "//div[@class='bp-ColumnLayout-tr row']")
+    private ElementsCollection videoSections;
 
     public void login(String username, String pass, boolean stayLoggedIn) {
         loginLink.click();
@@ -45,5 +60,12 @@ public class LandingBackbase {
         passwordField.sendKeys(pass);
         rememberMeCheckBox.setSelected(stayLoggedIn);
         logInBtn.click();
+    }
+
+    public boolean isDemoWidgetContainText(String text) {
+        for (SelenideElement element : videoSections) {
+            if (element.has(Condition.hasText(text))) return true;
+        }
+        return false;
     }
 }
