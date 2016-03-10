@@ -3,8 +3,10 @@ package com.backbase.uitest;
 import com.backbase.uitests.pages.LandingBackbase;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import ru.yandex.qatools.allure.annotations.Title;
 
+import static com.backbase.conditions.BackbaseCondition.*;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -130,11 +132,10 @@ public class BackbaseExtranetTest extends BaseTest {
         assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains("/home#sign-up"));
     }
 
-
     //TODO Maybe, add new widgets in DEMOs content?
     @Title("DEMOS : Videos Content - Availability depending on user type")
     @Test
-    public void testDemosForInternalUsers() {
+    public void testDemosForInnternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getDemosLink().hover();
@@ -143,8 +144,29 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Home"));
         landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Demos"));
         landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Videos"));
-        assertTrue(landingBackbase.getVideoSections().stream().anyMatch(t->t.has(hasText("Backbase Connect Internal Keynote"))));
-        assertTrue(landingBackbase.getVideoSections().stream().anyMatch(t->t.has(hasText("CXP Mobile SDK"))));
+        assertTrue(landingBackbase.getVideoSections().stream().anyMatch(t -> t.has(hasText("Backbase Connect Internal Keynote"))));
+        assertTrue(landingBackbase.getVideoSections().stream().anyMatch(t -> t.has(hasText("CXP Mobile SDK"))));
         assertTrue(landingBackbase.getVideoSections().stream().anyMatch(t -> t.has(hasText("URL to State Session"))));
     }
+
+    @Title("DEMOS : Videos UI")
+    @Test
+    public void testDemoUIForInternalUsers() {
+        LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
+        landingBackbase.login(internalUserName, internalUserPassword, false);
+        landingBackbase.getDemosLink().hover();
+        landingBackbase.getDemosLinkVideoSection().click();
+        assertTrue(title().contains("Videos - My Backbase"));
+        assertTrue(landingBackbase.getVideosPictureSection().stream().allMatch(t -> t.has(containsSubElement("img"))));
+        assertTrue(landingBackbase.getVideosTextSection().stream().allMatch(t -> t.has(containsSubElements("h3", "p", "em"))));
+        assertTrue(landingBackbase.getWatchConferenceButton().size() > 0);
+        landingBackbase.getWatchConferenceButton().get(0).click();
+        landingBackbase.getVideoContainer().shouldBe(visible);
+        landingBackbase.getVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
+//        getWebDriver().findElement(By.xpath("//button[@class='ytp-large-play-button ytp-button']")).click();
+//        landingBackbase.getVideoContainerPlayButton().shouldBe(present);
+        System.out.println(landingBackbase.isElementPresentAmongAllFrames("/descendant::button[@class='ytp-large-play-button ytp-button']"));
+    }
+
+
 }
