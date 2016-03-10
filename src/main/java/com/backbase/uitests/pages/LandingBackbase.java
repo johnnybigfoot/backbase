@@ -88,11 +88,6 @@ public class LandingBackbase {
 
     public boolean isElementPresentAmongAllFrames(String elemXpath) {
         ElementsCollection frames = $$(By.tagName("iframe"));
-        System.out.println(frames.size());
-//        for (SelenideElement oneFrame : frames) {
-//            switchTo().frame(oneFrame);
-//            if (oneFrame.findAll(By.xpath(elemXpath)).size() > 0) return true;
-//        }
         for (int i=0; i<frames.size(); i++) {
             switchTo().frame(i);
             if (WebDriverRunner.getWebDriver().findElements(By.xpath(elemXpath)).size() > 0) return true;

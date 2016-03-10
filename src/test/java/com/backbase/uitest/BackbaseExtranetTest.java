@@ -163,9 +163,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getWatchConferenceButton().get(0).click();
         landingBackbase.getVideoContainer().shouldBe(visible);
         landingBackbase.getVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
-//        getWebDriver().findElement(By.xpath("//button[@class='ytp-large-play-button ytp-button']")).click();
-//        landingBackbase.getVideoContainerPlayButton().shouldBe(present);
-        System.out.println(landingBackbase.isElementPresentAmongAllFrames("/descendant::button[@class='ytp-large-play-button ytp-button']"));
+        assertTrue(landingBackbase.isElementPresentAmongAllFrames("/descendant::button[@class='ytp-large-play-button ytp-button']"));
     }
 
 
