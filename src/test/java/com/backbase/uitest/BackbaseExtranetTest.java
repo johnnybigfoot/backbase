@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 public class BackbaseExtranetTest extends BaseTest {
     private static final String companyUserName = "mtv1@test.com";
     private static final String companyUserPassword = "password1";
-    private static final String extermalUserName = "catbug@mailinator.com";
-    private static final String extermalUserPassword = "ouinkouink00";
+    private static final String externalUserName = "catbug@mailinator.com";
+    private static final String externalUserPassword = "ouinkouink00";
     private static final String internalUserName = "extranet";
     private static final String internalUserPassword = "extranet_1712";
     private static final String partnerUserName = "mtv2@test.com";
@@ -75,8 +75,8 @@ public class BackbaseExtranetTest extends BaseTest {
     @Test
     public void testExternalUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
-        landingBackbase.login(extermalUserName, extermalUserPassword, false);
-        landingBackbase.getUserProfileMenu().shouldHave(text(extermalUserName));
+        landingBackbase.login(externalUserName, externalUserPassword, false);
+        landingBackbase.getUserProfileMenu().shouldHave(text(externalUserName));
     }
 
     @Title("Login : Internal user (@backbase address)")
@@ -174,5 +174,14 @@ public class BackbaseExtranetTest extends BaseTest {
         assertTrue(landingBackbase.getVideosTextSection().stream().anyMatch(t -> t.has(text("URL to State Session"))));
         assertTrue(landingBackbase.getVideosTextSection().stream().anyMatch(t -> t.has(text("CXP Mobile SDK"))));
         assertTrue(landingBackbase.getVideosTextSection().stream().anyMatch(t -> t.has(text("Developing with Launchpad"))));
+    }
+
+    @Title("DEMOS : external user (not a partner, not internal)")
+    @Test
+    public void testDemoUIForExternallUsers() {
+        LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
+        assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("/login-register"));
+        landingBackbase.getDemosLink().hover();
+        landingBackbase.getDemosLinkVideoSection().shouldNotBe(present);
     }
 }
