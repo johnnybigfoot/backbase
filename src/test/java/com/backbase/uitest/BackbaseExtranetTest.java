@@ -1,6 +1,7 @@
 package com.backbase.uitest;
 
 import com.backbase.uitests.pages.LandingBackbase;
+import com.codeborne.selenide.ElementsCollection;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -9,8 +10,7 @@ import ru.yandex.qatools.allure.annotations.Title;
 import static com.backbase.conditions.BackbaseCondition.*;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.title;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.junit.Assert.assertTrue;
@@ -159,12 +159,20 @@ public class BackbaseExtranetTest extends BaseTest {
         assertTrue(title().contains("Videos - My Backbase"));
         assertTrue(landingBackbase.getVideosPictureSection().stream().allMatch(t -> t.has(containsSubElement("img"))));
         assertTrue(landingBackbase.getVideosTextSection().stream().allMatch(t -> t.has(containsSubElements("h3", "p", "em"))));
-        assertTrue(landingBackbase.getWatchConferenceButton().size() > 0);
-        landingBackbase.getWatchConferenceButton().get(0).click();
-        landingBackbase.getVideoContainer().shouldBe(visible);
-        landingBackbase.getVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
-        assertTrue(landingBackbase.isElementPresentAmongAllFrames("/descendant::button[@class='ytp-large-play-button ytp-button']"));
+        landingBackbase.getWatchConferenceButtons().get(0).click();
+        assertTrue(landingBackbase.getWatchConferenceButtons().size() > 0);
+        landingBackbase.getActiveVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
+        ElementsCollection playButtonCollection = landingBackbase.findElementsAmongAllFrames("/descendant::button[@class='ytp-large-play-button ytp-button']");
+        assertTrue(playButtonCollection != null);
+        switchTo().defaultContent();  //here's some trick. You have to switch to default content often, otherwise your locators won;t work
+        landingBackbase.getActiveVideoContainer().$(By.xpath("/descendant::button[@title='Close']")).click();
+        landingBackbase.getActiveVideoContainer().shouldNotBe(visible);
+        landingBackbase.getWatchConferenceButtons().get(0).click();
+        landingBackbase.getActiveVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
+        landingBackbase.getLightBoxOverlays().get(0).click();
+        landingBackbase.getActiveVideoContainer().shouldNotBe(visible);
+        assertTrue(landingBackbase.getVideosTextSection().stream().anyMatch(t -> t.has(text("URL to State Session"))));
+        assertTrue(landingBackbase.getVideosTextSection().stream().anyMatch(t -> t.has(text("CXP Mobile SDK"))));
+        assertTrue(landingBackbase.getVideosTextSection().stream().anyMatch(t -> t.has(text("Developing with Launchpad"))));
     }
-
-
 }
