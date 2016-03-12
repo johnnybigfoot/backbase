@@ -118,7 +118,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getLoginLink().shouldBe(visible);
         landingBackbase.getSignUpLink().shouldBe(visible);
         landingBackbase.getSpanDisplayName().shouldNotBe(present);
-        assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains(baseUrl + "/home"));
+        assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains("/home"));
     }
 
     @Title("AUTH : Navigation between login, signup, reset password tabs")
@@ -127,9 +127,9 @@ public class BackbaseExtranetTest extends BaseTest {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.getSignUpLink().click();
         landingBackbase.getLogInHereLink().click();
-        assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains("/home#login"));
+        assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains("home#login"));
         landingBackbase.getSignUpInHereLink().click();
-        assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains("/home#sign-up"));
+        assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains("home#sign-up"));
     }
 
     //TODO Maybe, add new widgets in DEMOs content?
@@ -180,7 +180,7 @@ public class BackbaseExtranetTest extends BaseTest {
     @Test
     public void testDemoUIForExternallUsers() {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
-        assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("/login-register"));
+        assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
         landingBackbase.getDemosLink().hover();
         landingBackbase.getDemosLinkVideoSection().shouldNotBe(present);
     }
