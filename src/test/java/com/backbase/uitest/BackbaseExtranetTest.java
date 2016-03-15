@@ -1,6 +1,8 @@
 package com.backbase.uitest;
 
+import com.backbase.uitests.pages.DemoSection;
 import com.backbase.uitests.pages.LandingBackbase;
+import com.backbase.uitests.pages.RequestDemoForm;
 import com.codeborne.selenide.ElementsCollection;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +15,7 @@ import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class BackbaseExtranetTest extends BaseTest {
@@ -144,9 +147,10 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Home"));
         landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Demos"));
         landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Videos"));
-        assertTrue(landingBackbase.getVideoSections().stream().anyMatch(t -> t.has(hasText("Backbase Connect Internal Keynote"))));
-        assertTrue(landingBackbase.getVideoSections().stream().anyMatch(t -> t.has(hasText("CXP Mobile SDK"))));
-        assertTrue(landingBackbase.getVideoSections().stream().anyMatch(t -> t.has(hasText("URL to State Session"))));
+        DemoSection demoSection = page(DemoSection.class);
+        assertTrue(demoSection.getVideoSections().stream().anyMatch(t -> t.has(hasText("Backbase Connect Internal Keynote"))));
+        assertTrue(demoSection.getVideoSections().stream().anyMatch(t -> t.has(hasText("CXP Mobile SDK"))));
+        assertTrue(demoSection.getVideoSections().stream().anyMatch(t -> t.has(hasText("URL to State Session"))));
     }
 
     @Title("DEMOS : Videos UI")
@@ -157,31 +161,121 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getDemosLink().hover();
         landingBackbase.getDemosLinkVideoSection().click();
         assertTrue(title().contains("Videos - My Backbase"));
-        assertTrue(landingBackbase.getVideosPictureSection().stream().allMatch(t -> t.has(containsSubElement("img"))));
-        assertTrue(landingBackbase.getVideosTextSection().stream().allMatch(t -> t.has(containsSubElements("h3", "p", "em"))));
-        landingBackbase.getWatchConferenceButtons().get(0).click();
-        assertTrue(landingBackbase.getWatchConferenceButtons().size() > 0);
-        landingBackbase.getActiveVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
-        ElementsCollection playButtonCollection = landingBackbase.findElementsAmongAllFrames("/descendant::button[@class='ytp-large-play-button ytp-button']");
+        DemoSection demoSection = page(DemoSection.class);
+        assertTrue(demoSection.getVideosPictureSection().stream().allMatch(t -> t.has(containsSubElement("img"))));
+        assertTrue(demoSection.getVideosTextSection().stream().allMatch(t -> t.has(containsSubElements("h3", "p", "em"))));
+        demoSection.getWatchConferenceButtons().get(0).click();
+        assertTrue(demoSection.getWatchConferenceButtons().size() > 0);
+        demoSection.getActiveVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
+        ElementsCollection playButtonCollection = demoSection.findElementsAmongAllFrames("/descendant::button[@class='ytp-large-play-button ytp-button']");
         assertTrue(playButtonCollection != null);
         switchTo().defaultContent();  //here's some trick. You have to switch to default content often, otherwise your locators won;t work
-        landingBackbase.getActiveVideoContainer().$(By.xpath("/descendant::button[@title='Close']")).click();
-        landingBackbase.getActiveVideoContainer().shouldNotBe(visible);
-        landingBackbase.getWatchConferenceButtons().get(0).click();
-        landingBackbase.getActiveVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
-        landingBackbase.getLightBoxOverlays().get(0).click();
-        landingBackbase.getActiveVideoContainer().shouldNotBe(visible);
-        assertTrue(landingBackbase.getVideosTextSection().stream().anyMatch(t -> t.has(text("URL to State Session"))));
-        assertTrue(landingBackbase.getVideosTextSection().stream().anyMatch(t -> t.has(text("CXP Mobile SDK"))));
-        assertTrue(landingBackbase.getVideosTextSection().stream().anyMatch(t -> t.has(text("Developing with Launchpad"))));
+        demoSection.getActiveVideoContainer().$(By.xpath("/descendant::button[@title='Close']")).click();
+        demoSection.getActiveVideoContainer().shouldNotBe(visible);
+        demoSection.getWatchConferenceButtons().get(0).click();
+        demoSection.getActiveVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
+        demoSection.getLightBoxOverlays().get(0).click();
+        demoSection.getActiveVideoContainer().shouldNotBe(visible);
+        assertTrue(demoSection.getVideosTextSection().stream().anyMatch(t -> t.has(text("URL to State Session"))));
+        assertTrue(demoSection.getVideosTextSection().stream().anyMatch(t -> t.has(text("CXP Mobile SDK"))));
+        assertTrue(demoSection.getVideosTextSection().stream().anyMatch(t -> t.has(text("Developing with Launchpad"))));
     }
 
     @Title("DEMOS : external user (not a partner, not internal)")
     @Test
-    public void testDemoUIForExternallUsers() {
+    public void testDemoUIForExternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
         assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
-        landingBackbase.getDemosLink().hover();
+        landingBackbase.getDemosLinkForUnlogged().hover();
         landingBackbase.getDemosLinkVideoSection().shouldNotBe(present);
+        landingBackbase = open(baseUrl, LandingBackbase.class);
+        landingBackbase.getShowcaseLink().shouldBe(visible);
+        landingBackbase.getShowcaseLink().click();
+        landingBackbase.login(externalUserName, externalUserPassword, false);
+        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Home"));
+        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Demos"));
+        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Backbase Showcase"));
+        DemoSection demoSection = page(DemoSection.class);
+        assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
+        demoSection.getRequestLiveDemoBtn().shouldBe(visible);
+        demoSection.getDownloadBtn().shouldNotBe(present);
+        demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
+        demoSection.getShowcaseInstaller().shouldNotBe(present);
+        demoSection.getShowcaseArchetype().shouldNotBe(present);
+        assertFalse(demoSection.isDemoWidgetContainsText("Backbase Mobile Demo for iOS"));
+        demoSection.getRequestLiveDemoBtn().click();
+        demoSection.getRequestLiveDemoForm().shouldBe(visible);
+        RequestDemoForm requestDemoForm = page(RequestDemoForm.class);
+        requestDemoForm.getFirstNameField().setValue("Cat");
+        requestDemoForm.getLastNameField().setValue("Bug");
+        requestDemoForm.getCompanyField().setValue("Braviest Warriors");
+        requestDemoForm.getTitleField().setValue("Pet");
+        requestDemoForm.getEmailField().setValue("catbug@mailinator.com");
+        requestDemoForm.getPhoneField().setValue("00000000000");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        requestDemoForm.getCountrySelect().selectOption("Peru");
+        requestDemoForm.getLabels().stream().anyMatch(t -> t.has(text("This field is required.")));
+        requestDemoForm.getDescriptionSelect().selectOption("Client");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        requestDemoForm.getLabels().stream().anyMatch(t -> t.has(text("This field is required.")));
+        requestDemoForm.getAcceptTermcCheckbox().setSelected(true);
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        demoSection.getMessageSection().shouldHave(text("Thank you for your Evaluation Request, we will contact you within 48 hours."));
+        demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
+    }
+
+    @Title("DEMOS : external user (not a partner, not internal)")
+    @Test
+    public void testDemoUIForExternalUsersForm() {
+        LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
+        assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
+        landingBackbase = open(baseUrl, LandingBackbase.class);
+        landingBackbase.getShowcaseLink().click();
+        landingBackbase.login(externalUserName, externalUserPassword, false);
+        DemoSection demoSection = page(DemoSection.class);
+        demoSection.getRequestLiveDemoBtn().click();
+        demoSection.getRequestLiveDemoForm().shouldBe(visible);
+        RequestDemoForm requestDemoForm = page(RequestDemoForm.class);
+        requestDemoForm.getFirstNameField().setValue("");
+        requestDemoForm.getLastNameField().setValue("");
+        requestDemoForm.getCountrySelect().selectOption("Select Country");
+        requestDemoForm.getCompanyField().setValue("");
+        requestDemoForm.getTitleField().setValue("");
+        requestDemoForm.getEmailField().setValue("");
+        requestDemoForm.getPhoneField().setValue("");
+        requestDemoForm.getDescriptionSelect().selectOption("Select Evaluation Purpose");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 9);
+        requestDemoForm.getCompanyField().pressEnter();
+        demoSection.getRequestLiveDemoForm().shouldBe(visible);
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 9);
+        requestDemoForm.getFirstNameField().setValue("Cat");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 8);
+        requestDemoForm.getLastNameField().setValue("Bug");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 7);
+        requestDemoForm.getCompanyField().setValue("Braviest Warriors");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 6);
+        requestDemoForm.getTitleField().setValue("Pet");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 5);
+        requestDemoForm.getEmailField().setValue("catbug@mailinator.com");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 4);
+        requestDemoForm.getPhoneField().setValue("00000000000");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 3);
+        requestDemoForm.getCountrySelect().selectOption("Peru");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 2);
+        requestDemoForm.getDescriptionSelect().selectOption("Client");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() == 1);
+        requestDemoForm.getAcceptTermcCheckbox().setSelected(true);
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        demoSection.getMessageSection().shouldHave(text("Thank you for your Evaluation Request, we will contact you within 48 hours."));
+        demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
     }
 }

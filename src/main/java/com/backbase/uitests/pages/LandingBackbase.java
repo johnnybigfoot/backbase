@@ -54,40 +54,26 @@ public class LandingBackbase {
     private SelenideElement signUpInHereLink;
     @FindBy(xpath = "//a[@role='button' and @href='/demos']")
     private SelenideElement demosLink;
+    @FindBy(xpath = "//a[contains(text(),'Demos') and @class='nav-disabled'][1]")
+    private SelenideElement demosLinkForUnlogged;
+    @FindBy(xpath = "//ul[@class='nav navbar-nav']")
+    private SelenideElement navBar;
+    @FindBy(xpath = "//a[@href='/backbase-showcase']")
+    private SelenideElement showcaseLink;
+
+
     @FindBy(xpath = "//a[@href='/demos/videos' and text()='Videos']")
     private SelenideElement demosLinkVideoSection;
     @FindBy(xpath = "//div[@class='bp-g-model']")
     private SelenideElement currentSectionDiv;
-    @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]")
-    private ElementsCollection videoSections;
-    @FindBy(xpath = "//div[@class='bd-imageContent-dropArea image-align-center border']")
-    private ElementsCollection videosPictureSection;
-    @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]/div[@class='bd-textContent-dropArea bd-ContentTemplate-para bd-contentArea']")
-    private ElementsCollection videosTextSection;
-    @FindBy(css = ".btn.Default")
-    private ElementsCollection watchConferenceButtons;
-    @FindBy(xpath = "//div[@class='bp-container lp-lightbox-container panel-chrome-default youtube-widget-container lp-lightbox-on']/div[@class='lp-lightbox-inner panel panel-chrome-default']")
-    private SelenideElement activeVideoContainer;
-    @FindBy(css = "div.html5-video-player.unstarted-mode.ytp-hide-controls")
-    private SelenideElement videoContainerPlayButton;
-    @FindBy(xpath = "//button[@class='lp-widget-control lp-lightbox-close' and @title='Close']")
-    private SelenideElement videoContainerCloseButton;
-    @FindBy(css = "div.lp-lightbox-overlay")
-    private ElementsCollection lightBoxOverlays;
+
 
     public void login(String username, String pass, boolean stayLoggedIn) {
-        loginLink.click();
+        if (!userNameField.has(Condition.visible)) loginLink.click();
         userNameField.sendKeys(username);
         passwordField.sendKeys(pass);
         rememberMeCheckBox.setSelected(stayLoggedIn);
         logInBtn.click();
-    }
-
-    public boolean isDemoWidgetContainText(String text) {
-        for (SelenideElement element : videoSections) {
-            if (element.has(Condition.hasText(text))) return true;
-        }
-        return false;
     }
 
     public ElementsCollection findElementsAmongAllFrames(String elemXpath) {
