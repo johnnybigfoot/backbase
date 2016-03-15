@@ -286,9 +286,5 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getDemosLink().click();
         landingBackbase.getDemosLink().click();
-        landingBackbase.getDemosLinkVideoSection().shouldNotBe(present);
-        landingBackbase = open(baseUrl, LandingBackbase.class);
-        landingBackbase.getShowcaseLink().shouldBe(visible);
-        landingBackbase.getShowcaseLink().click();
     }
 }
