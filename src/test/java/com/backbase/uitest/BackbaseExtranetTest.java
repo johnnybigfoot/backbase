@@ -284,7 +284,27 @@ public class BackbaseExtranetTest extends BaseTest {
     public void testDemoForInternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
-        landingBackbase.getDemosLink().click();
-        landingBackbase.getDemosLink().click();
+        landingBackbase.getDemosLink().hover();
+        landingBackbase.getBachbaseDemoSublink().click();
+        assertTrue("Page URL doesn't contain '/backbase-demo' !", getWebDriver().getCurrentUrl().contains("backbase-demo"));
+        assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
+        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Home"));
+        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Demos"));
+        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Backbase Demo"));
+        DemoSection demoSection = page(DemoSection.class);
+        demoSection.getDownloadBtn().shouldBe(visible);
+        demoSection.getRequestLiveDemoBtn().shouldNotBe(visible);
+        demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
+        demoSection.getDemoInstallerLink().shouldBe(visible);
+        demoSection.getDemoArchetypeLink().shouldBe(visible);
+//        demoSection.getDownloadBtn().find(By.tagName("i")).click();
+        demoSection.getDownloadBtn().click();  //TODO Make this thing stable
+        demoSection.getDownloadBtnForMac().shouldBe(visible);
+        demoSection.getDownloadBtnForWin().shouldBe(visible);
+        demoSection.getDownloadBtn().shouldBe(visible);
+        demoSection.getDownloadBtn().click();
+        demoSection.getDownloadBtnForMac().shouldNotBe(visible);
+        demoSection.getDownloadBtnForWin().shouldNotBe(visible);
+
     }
 }
