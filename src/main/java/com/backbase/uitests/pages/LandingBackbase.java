@@ -60,6 +60,8 @@ public class LandingBackbase {
     private SelenideElement navBar;
     @FindBy(xpath = "//a[@href='/backbase-showcase']")
     private SelenideElement showcaseLink;
+ @FindBy(xpath = "//a[@href='/backbase-demo']")
+    private SelenideElement bachbaseDemoSublink;
 
 
     @FindBy(xpath = "//a[@href='/demos/videos' and text()='Videos']")

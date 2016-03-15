@@ -13,8 +13,12 @@ import org.openqa.selenium.support.FindBy;
 public class DemoSection extends LandingBackbase {
     @FindBy(xpath = "//div[@class='widget-request-demo-button pull-right']/button[@class='btn btn-primary' and text()='Request Live Demo']")
     private SelenideElement requestLiveDemoBtn;
-    @FindBy(xpath = "//button[contains(text(),'Download')]")
+    @FindBy(xpath = "//button[contains(text(),'Download')]/i")
     private SelenideElement downloadBtn;
+    @FindBy(xpath = "//a[@href='/bb/download?installer=mac&xmlName=ev-updates.xml']")
+    private SelenideElement downloadBtnForMac;
+    @FindBy(xpath = "//a[@href='/bb/download?installer=win&xmlName=ev-updates.xml']")
+    private SelenideElement downloadBtnForWin;
     @FindBy(css = "div.bp-container.lp-lightbox-container.panel-chrome-default.lp-lightbox-on")
     private SelenideElement requestLiveDemoForm;
     @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]")
@@ -39,13 +43,23 @@ public class DemoSection extends LandingBackbase {
     private SelenideElement showcaseArchetype;
     @FindBy(css = "div.toast-message")
     private SelenideElement messageSection;
+    @FindBy(xpath = "//button[@class='btn btn-large dropdown-toggle' and @data-toggle='dropdown']")
+    private SelenideElement downloadButton;
+    @FindBy(xpath = "//a[@href='#backbase_demo_installer']")
+    private SelenideElement demoInstallerLink;
+    @FindBy(xpath = "//a[@href='#backbase_demo_archetype']")
+    private SelenideElement demoArchetypeLink;
+    @FindBy(xpath = "//a[@href='#backbase_mobile_showcase_for_ios']")
+    private SelenideElement backbaseMobileShowcaseLink;
+    @FindBy(xpath = "//a[@href='#backbase_showcase_installer']")
+    private SelenideElement backbaseShowcaseInstallerLink;
+    @FindBy(xpath = "//a[@href='#backbase_showcase_archetype']")
+    private SelenideElement backbaseShowcaseArchetypeLink;
 
-    public boolean isDemoWidgetContainsText(String text) {
+    public boolean isDemoWidgetContainsText (String text) {
         for (SelenideElement element : videoSections) {
             if (element.has(Condition.hasText(text))) return true;
         }
         return false;
     }
-
-
 }
