@@ -297,7 +297,7 @@ public class BackbaseExtranetTest extends BaseTest {
         demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
         demoSection.getDemoInstallerLink().shouldBe(visible);
         demoSection.getDemoArchetypeLink().shouldBe(visible);
-//        demoSection.getDownloadBtn().find(By.tagName("i")).click();
+        demoSection.getDownloadBtn().find(By.tagName("i")).click();
         demoSection.getDownloadBtn().click();  //TODO Make this thing stable
         demoSection.getDownloadBtnForMac().shouldBe(visible);
         demoSection.getDownloadBtnForWin().shouldBe(visible);
