@@ -1,12 +1,14 @@
 package com.backbase.uitest;
 
 import com.backbase.uitests.pages.DemoSection;
+import com.backbase.uitests.pages.DocsSection;
 import com.backbase.uitests.pages.LandingBackbase;
 import com.backbase.uitests.pages.RequestDemoForm;
 import com.codeborne.selenide.ElementsCollection;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Title;
 
 import static com.backbase.conditions.BackbaseCondition.*;
@@ -35,7 +37,7 @@ public class BackbaseExtranetTest extends BaseTest {
 //    public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
 
     @Before
-    public void overrideSelenideConfig () {
+    public void overrideSelenideConfig() {
         timeout = driverTimeoutInSeconds * 1000;
         baseUrl = backbaseUrl;
         startMaximized = true;
@@ -48,7 +50,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Company user (partner or client")
     @Test
-    public void testCompanyUserShouldLogin () {
+    public void testCompanyUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(companyUserName, companyUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(companyUserName));
@@ -56,7 +58,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Login error")
     @Test
-    public void testLoginShouldFail () {
+    public void testLoginShouldFail() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.getLoginLink().click();
         landingBackbase.getLogInBtn().click();
@@ -76,7 +78,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : External user (not a partner/company, not internal")
     @Test
-    public void testExternalUserShouldLogin () {
+    public void testExternalUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(externalUserName, externalUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(externalUserName));
@@ -84,7 +86,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Internal user (@backbase address)")
     @Test
-    public void testInternalUserShouldLogin () {
+    public void testInternalUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(internalUserName));
@@ -92,7 +94,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Company user (partner or client)")
     @Test
-    public void testPartnerUserShouldLogin () {
+    public void testPartnerUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(partnerUserName, partnerUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(partnerUserName));
@@ -100,7 +102,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Support user")
     @Test
-    public void testSupportUserShouldLogin () {
+    public void testSupportUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(supportUserName, supportUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(supportUserName));
@@ -108,7 +110,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Training user")
     @Test
-    public void testTrainingUserShouldLogin () {
+    public void testTrainingUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(trainingUserName, trainingUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(trainingUserName));
@@ -116,7 +118,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Logout elements accessibility")
     @Test
-    public void testLogoutView () {
+    public void testLogoutView() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.getLoginLink().shouldBe(visible);
         landingBackbase.getSignUpLink().shouldBe(visible);
@@ -126,7 +128,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("AUTH : Navigation between login, signup, reset password tabs")
     @Test
-    public void testTabsNavigation () {
+    public void testTabsNavigation() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.getSignUpLink().click();
         landingBackbase.getLogInHereLink().click();
@@ -138,15 +140,15 @@ public class BackbaseExtranetTest extends BaseTest {
     //TODO Maybe, add new widgets in DEMOs content?
     @Title("DEMOS : Videos Content - Availability depending on user type")
     @Test
-    public void testDemosForInnternalUsers () {
+    public void testDemosForInnternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getDemosLink().hover();
         landingBackbase.getDemosLinkVideoSection().click();
         assertTrue("Title of page should be 'Videos - My Backbase', but it's: " + title(), title().contains("Videos - My Backbase"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Home"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Demos"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Videos"));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Videos"))));
         DemoSection demoSection = page(DemoSection.class);
         assertTrue(demoSection.getVideoSections().stream().anyMatch(t -> t.has(hasText("Backbase Connect Internal Keynote"))));
         assertTrue(demoSection.getVideoSections().stream().anyMatch(t -> t.has(hasText("CXP Mobile SDK"))));
@@ -155,7 +157,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DEMOS : Videos UI")
     @Test
-    public void testDemoUIForInternalUsers () {
+    public void testDemoUIForInternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getDemosLink().hover();
@@ -183,7 +185,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DEMOS : external user (not a partner, not internal)")
     @Test
-    public void testDemoUIForExternalUsers () {
+    public void testDemoUIForExternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
         assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
         landingBackbase.getDemosLinkForUnlogged().hover();
@@ -192,12 +194,12 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getShowcaseLink().shouldBe(visible);
         landingBackbase.getShowcaseLink().click();
         landingBackbase.login(externalUserName, externalUserPassword, false);
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Home"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Demos"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Backbase Showcase"));
         DemoSection demoSection = page(DemoSection.class);
-        assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
         demoSection.getRequestLiveDemoBtn().shouldBe(visible);
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Showcase"))));
+        assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
         demoSection.getDownloadBtn().shouldNotBe(present);
         demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
         demoSection.getShowcaseInstaller().shouldNotBe(present);
@@ -226,7 +228,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DEMOS : external user (not a partner, not internal)")
     @Test
-    public void testDemoUIForExternalUsersForm () {
+    public void testDemoUIForExternalUsersForm() {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
         assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
         landingBackbase = open(baseUrl, LandingBackbase.class);
@@ -281,23 +283,22 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DEMOS : internal user (@backbase address)")
     @Test
-    public void testDemoForInternalUsers () {
+    public void testDemoForInternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getDemosLink().hover();
         landingBackbase.getBachbaseDemoSublink().click();
         assertTrue("Page URL doesn't contain '/backbase-demo' !", getWebDriver().getCurrentUrl().contains("backbase-demo"));
         assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Home"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Demos"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Backbase Demo"));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Demo"))));
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getDownloadBtn().shouldBe(visible);
         demoSection.getRequestLiveDemoBtn().shouldNotBe(visible);
         demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
         demoSection.getDemoInstallerLink().shouldBe(visible);
         demoSection.getDemoArchetypeLink().shouldBe(visible);
-        demoSection.getDownloadBtn().find(By.tagName("i")).click();
         demoSection.getDownloadBtn().click();  //TODO Make this thing stable
         demoSection.getDownloadBtnForMac().shouldBe(visible);
         demoSection.getDownloadBtnForWin().shouldBe(visible);
@@ -308,14 +309,91 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getDemosLink().hover();
         landingBackbase.getShowcaseLink().click();
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Home"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Demos"));
-        landingBackbase.getCurrentSectionDiv().shouldHave(hasText("Backbase Showcase"));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Showcase"))));
         demoSection.getDownloadBtn().shouldBe(visible);
         demoSection.getRequestLiveDemoBtn().shouldNotBe(visible);
         demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
         demoSection.getBackbaseShowcaseInstallerLink().shouldBe(visible);
         demoSection.getBackbaseShowcaseArchetypeLink().shouldBe(visible);
         demoSection.getBackbaseMobileShowcaseLink().shouldBe(visible);
+    }
+
+    @Title("DEMO : partner user")
+    @Description("Part of test was removed from original DEMOS_demo_partner.html because it duplicates previous test logic - empty fields validation")
+    @Test
+    public void testDemoForPartnerUsers() {
+        LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
+        landingBackbase.login(partnerUserName, partnerUserPassword, false);
+        landingBackbase.getDemosLink().hover();
+        landingBackbase.getBachbaseDemoSublink().click();
+        assertTrue("Page URL doesn't contain '/backbase-demo' !", getWebDriver().getCurrentUrl().contains("backbase-demo"));
+        assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Demo"))));
+        DemoSection demoSection = page(DemoSection.class);
+        demoSection.getDownloadBtn().shouldBe(visible);
+        demoSection.getRequestLiveDemoBtn().shouldNotBe(visible);
+        demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
+        demoSection.getDemoInstallerLink().shouldBe(visible);
+        demoSection.getDemoArchetypeLink().shouldBe(visible);
+        demoSection.getDownloadBtn().click();  //TODO Make this thing stable
+        demoSection.getDownloadBtnForMac().shouldBe(visible);
+        demoSection.getDownloadBtnForWin().shouldBe(visible);
+        demoSection.getDownloadBtn().shouldBe(visible);
+        demoSection.getDownloadBtn().click();
+        demoSection.getDownloadBtnForMac().shouldNotBe(visible);
+        demoSection.getDownloadBtnForWin().shouldNotBe(visible);
+        open(baseUrl, LandingBackbase.class);
+        landingBackbase.getDemosLink().hover();
+        landingBackbase.getShowcaseLink().shouldBe(visible);
+        landingBackbase.getShowcaseLink().click();
+        assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Showcase"))));
+        demoSection.getRequestLiveDemoBtn().shouldBe(visible);
+        demoSection.getDownloadBtn().shouldBe(present);
+        demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
+        demoSection.getBackbaseShowcaseInstallerLink().shouldBe(visible);
+        demoSection.getBackbaseShowcaseArchetypeLink().shouldNotBe(visible);
+        demoSection.getBackbaseMobileShowcaseLink().shouldNot(visible);
+        demoSection.getRequestLiveDemoBtn().click();
+        demoSection.getRequestLiveDemoForm().shouldBe(visible);
+        RequestDemoForm requestDemoForm = page(RequestDemoForm.class);
+        requestDemoForm.getFirstNameField().setValue("MTV2_Partner");
+        requestDemoForm.getLastNameField().setValue("Test");
+        requestDemoForm.getCompanyField().setValue("Backbase");
+        requestDemoForm.getTitleField().setValue("Test Partner");
+        requestDemoForm.getEmailField().setValue("mtv2@test.com");
+        requestDemoForm.getPhoneField().setValue("+33(000000000)");
+        requestDemoForm.getCountrySelect().selectOption("Serbia");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() > 1);
+        requestDemoForm.getDescriptionSelect().selectOption("Client");
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        assertTrue(requestDemoForm.getLabels().stream().filter(l -> l.has(text("This field is required."))).count() > 0);
+        requestDemoForm.getAcceptTermcCheckbox().setSelected(true);
+        requestDemoForm.getRequestLiveDemoBtn().click();
+        demoSection.getMessageSection().shouldHave(text("Thank you for your Evaluation Request, we will contact you within 48 hours."));
+        demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
+    }
+
+    @Title("DOCS : CXP Documentation UI")
+    @Test
+    public void testCXPDocumentationUI() {
+        LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
+        landingBackbase.login(externalUserName, externalUserPassword, false);
+        landingBackbase.getSeeAllDocumentationBtn().click();
+        assertTrue("Page URL doesn't contain '/docs' !", getWebDriver().getCurrentUrl().contains("/docs"));
+        DocsSection docsSection = page(DocsSection.class);
+        docsSection.getNeededDocumentationButton("CXP").click();
+        assertTrue("Page URL doesn't contain '/product-documentation/documentation' !", getWebDriver().getCurrentUrl().contains("/product-documentation/documentation"));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("CXP"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Documentation"))));
     }
 }

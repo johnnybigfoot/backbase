@@ -1,6 +1,5 @@
 package com.backbase.uitests.pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import lombok.Getter;
@@ -21,8 +20,6 @@ public class DemoSection extends LandingBackbase {
     private SelenideElement downloadBtnForWin;
     @FindBy(css = "div.bp-container.lp-lightbox-container.panel-chrome-default.lp-lightbox-on")
     private SelenideElement requestLiveDemoForm;
-    @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]")
-    private ElementsCollection videoSections;
     @FindBy(xpath = "//div[@class='bd-imageContent-dropArea image-align-center border']")
     private ElementsCollection videosPictureSection;
     @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]/div[@class='bd-textContent-dropArea bd-ContentTemplate-para bd-contentArea']")
@@ -55,11 +52,4 @@ public class DemoSection extends LandingBackbase {
     private SelenideElement backbaseShowcaseInstallerLink;
     @FindBy(xpath = "//a[@href='#backbase_showcase_archetype']")
     private SelenideElement backbaseShowcaseArchetypeLink;
-
-    public boolean isDemoWidgetContainsText (String text) {
-        for (SelenideElement element : videoSections) {
-            if (element.has(Condition.hasText(text))) return true;
-        }
-        return false;
-    }
 }

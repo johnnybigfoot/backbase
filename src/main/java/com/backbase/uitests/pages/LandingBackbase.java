@@ -60,15 +60,16 @@ public class LandingBackbase {
     private SelenideElement navBar;
     @FindBy(xpath = "//a[@href='/backbase-showcase']")
     private SelenideElement showcaseLink;
- @FindBy(xpath = "//a[@href='/backbase-demo']")
+    @FindBy(xpath = "//a[@href='/backbase-demo']")
     private SelenideElement bachbaseDemoSublink;
-
-
     @FindBy(xpath = "//a[@href='/demos/videos' and text()='Videos']")
     private SelenideElement demosLinkVideoSection;
-    @FindBy(xpath = "//div[@class='bp-g-model']")
-    private SelenideElement currentSectionDiv;
-
+    @FindBy(xpath = "//ul[@class='bd-breadcrumb breadcrumb']/li")
+    private ElementsCollection currentSectionMarks;
+    @FindBy(xpath = "//a[@class='btn' and @data-js='docs-link']")
+    private SelenideElement seeAllDocumentationBtn;
+    @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]")
+    private ElementsCollection videoSections;
 
     public void login(String username, String pass, boolean stayLoggedIn) {
         if (!userNameField.has(Condition.visible)) loginLink.click();
@@ -89,5 +90,12 @@ public class LandingBackbase {
             }
         }
         return null;
+    }
+
+    public boolean isDemoWidgetContainsText(String text) {
+        for (SelenideElement element : videoSections) {
+            if (element.has(Condition.hasText(text))) return true;
+        }
+        return false;
     }
 }
