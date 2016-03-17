@@ -17,7 +17,6 @@ import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.source;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -36,6 +35,21 @@ public class BackbaseExtranetTest extends BaseTest {
     private static final String trainingUserPassword = "extranet1";
 //    @Rule
 //    public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
+
+    private void logout () {
+        open(backbaseUrl + "j_spring_security_logout?portalName=extranet");
+    }
+
+    private void smokeCheckOfDocsSection (LandingBackbase landingBackbase, DocsSection docsSection) {
+        landingBackbase.getNavBarButton("Docs").click();
+        assertTrue("Page URL doesn't contain '/docs' !", getWebDriver().getCurrentUrl().contains("/docs"));
+        docsSection.getNeededDocumentationButton("CXP").click();
+        assertTrue("Page URL doesn't contain '/product-documentation/documentation' !", getWebDriver().getCurrentUrl().contains("/product-documentation/documentation"));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("CXP"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Documentation"))));
+    }
 
     @Before
     public void overrideSelenideConfig () {
@@ -141,11 +155,11 @@ public class BackbaseExtranetTest extends BaseTest {
     //TODO Maybe, add new widgets in DEMOs content?
     @Title("DEMOS : Videos Content - Availability depending on user type")
     @Test
-    public void testDemosForInnternalUsers () {
+    public void testDemosForInternalUsers () {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
-        landingBackbase.getDemosLink().hover();
-        landingBackbase.getDemosLinkVideoSection().click();
+        landingBackbase.getNavBarButton("Demos").hover();
+        landingBackbase.getNavBarButtonsSublink("Demos", "Videos").click();
         assertTrue("Title of page should be 'Videos - My Backbase', but it's: " + title(), title().contains("Videos - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -161,8 +175,8 @@ public class BackbaseExtranetTest extends BaseTest {
     public void testDemoUIForInternalUsers () {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
-        landingBackbase.getDemosLink().hover();
-        landingBackbase.getDemosLinkVideoSection().click();
+        landingBackbase.getNavBarButton("Demos").hover();
+        landingBackbase.getNavBarButtonsSublink("Demos", "Videos").click();
         assertTrue(title().contains("Videos - My Backbase"));
         DemoSection demoSection = page(DemoSection.class);
         assertTrue(demoSection.getVideosPictureSection().stream().allMatch(t -> t.has(containsSubElement("img"))));
@@ -177,7 +191,7 @@ public class BackbaseExtranetTest extends BaseTest {
         demoSection.getActiveVideoContainer().shouldNotBe(visible);
         demoSection.getWatchConferenceButtons().get(0).click();
         demoSection.getActiveVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
-        demoSection.getLightBoxOverlays().get(0).click();
+        demoSection.getBottomOfPageAboutSection().click();
         demoSection.getActiveVideoContainer().shouldNotBe(visible);
         assertTrue(demoSection.getVideosTextSection().stream().anyMatch(t -> t.has(text("URL to State Session"))));
         assertTrue(demoSection.getVideosTextSection().stream().anyMatch(t -> t.has(text("CXP Mobile SDK"))));
@@ -190,10 +204,10 @@ public class BackbaseExtranetTest extends BaseTest {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
         assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
         landingBackbase.getDemosLinkForUnlogged().hover();
-        landingBackbase.getDemosLinkVideoSection().shouldNotBe(present);
+        landingBackbase.getNavBarButtonsSublink("Demos", "Videos").shouldNotBe(present);
         landingBackbase = open(baseUrl, LandingBackbase.class);
-        landingBackbase.getShowcaseLink().shouldBe(visible);
-        landingBackbase.getShowcaseLink().click();
+        landingBackbase.getNavBarButton("Backbase Showcase").shouldBe(visible);
+        landingBackbase.getNavBarButton("Backbase Showcase").click();
         landingBackbase.login(externalUserName, externalUserPassword, false);
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getRequestLiveDemoBtn().shouldBe(visible);
@@ -233,7 +247,7 @@ public class BackbaseExtranetTest extends BaseTest {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
         assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
         landingBackbase = open(baseUrl, LandingBackbase.class);
-        landingBackbase.getShowcaseLink().click();
+        landingBackbase.getNavBarButton("Backbase Showcase").click();
         landingBackbase.login(externalUserName, externalUserPassword, false);
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getRequestLiveDemoBtn().click();
@@ -287,8 +301,8 @@ public class BackbaseExtranetTest extends BaseTest {
     public void testDemoForInternalUsers () {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
-        landingBackbase.getDemosLink().hover();
-        landingBackbase.getBachbaseDemoSublink().click();
+        landingBackbase.getNavBarButton("Demos").hover();
+        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Demo").click();
         assertTrue("Page URL doesn't contain '/backbase-demo' !", getWebDriver().getCurrentUrl().contains("backbase-demo"));
         assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
@@ -307,8 +321,8 @@ public class BackbaseExtranetTest extends BaseTest {
         demoSection.getDownloadBtn().click();
         demoSection.getDownloadBtnForMac().shouldNotBe(visible);
         demoSection.getDownloadBtnForWin().shouldNotBe(visible);
-        landingBackbase.getDemosLink().hover();
-        landingBackbase.getShowcaseLink().click();
+        landingBackbase.getNavBarButton("Demos").hover();
+        landingBackbase.getNavBarButton("Backbase Showcase").click();
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -327,8 +341,8 @@ public class BackbaseExtranetTest extends BaseTest {
     public void testDemoForPartnerUsers () {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(partnerUserName, partnerUserPassword, false);
-        landingBackbase.getDemosLink().hover();
-        landingBackbase.getBachbaseDemoSublink().click();
+        landingBackbase.getNavBarButton("Demos").hover();
+        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Demo").click();
         assertTrue("Page URL doesn't contain '/backbase-demo' !", getWebDriver().getCurrentUrl().contains("backbase-demo"));
         assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
@@ -348,9 +362,9 @@ public class BackbaseExtranetTest extends BaseTest {
         demoSection.getDownloadBtnForMac().shouldNotBe(visible);
         demoSection.getDownloadBtnForWin().shouldNotBe(visible);
         open(baseUrl, LandingBackbase.class);
-        landingBackbase.getDemosLink().hover();
-        landingBackbase.getShowcaseLink().shouldBe(visible);
-        landingBackbase.getShowcaseLink().click();
+        landingBackbase.getNavBarButton("Demos").hover();
+        landingBackbase.getNavBarButton("Backbase Showcase").shouldBe(visible);
+        landingBackbase.getNavBarButton("Backbase Showcase").click();
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -387,37 +401,37 @@ public class BackbaseExtranetTest extends BaseTest {
     public void testCXPDocumentationUI () {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(companyUserName, companyUserPassword, false);
-        landingBackbase.getDocsLink().click();
+        landingBackbase.getNavBarButton("Docs").click();
         DocsSection docsSection = page(DocsSection.class);
         smokeCheckOfDocsSection(landingBackbase, docsSection);
         logout();
         landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
-        landingBackbase.getDocsLink().click();
+        landingBackbase.getNavBarButton("Docs").click();
         docsSection = page(DocsSection.class);
         smokeCheckOfDocsSection(landingBackbase, docsSection);
         logout();
         landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(partnerUserName, partnerUserPassword, false);
-        landingBackbase.getDocsLink().click();
+        landingBackbase.getNavBarButton("Docs").click();
         docsSection = page(DocsSection.class);
         smokeCheckOfDocsSection(landingBackbase, docsSection);
         logout();
         landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(supportUserName, supportUserPassword, false);
-        landingBackbase.getDocsLink().click();
+        landingBackbase.getNavBarButton("Docs").click();
         docsSection = page(DocsSection.class);
         smokeCheckOfDocsSection(landingBackbase, docsSection);
         logout();
         landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(externalUserName, externalUserPassword, false);
-        landingBackbase.getDocsLink().click();
+        landingBackbase.getNavBarButton("Docs").click();
         docsSection = page(DocsSection.class);
         smokeCheckOfDocsSection(landingBackbase, docsSection);
         logout();
         landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(trainingUserName, trainingUserPassword, false);
-        landingBackbase.getDocsLink().click();
+        landingBackbase.getNavBarButton("Docs").click();
         docsSection = page(DocsSection.class);
         smokeCheckOfDocsSection(landingBackbase, docsSection);
         docsSection.getNextPageBtn().shouldBe(visible);
@@ -430,11 +444,11 @@ public class BackbaseExtranetTest extends BaseTest {
         docsSection.getScrollToTopBtn().shouldBe(visible);
         docsSection.getContentLeftPane().shouldBe(present);
         docsSection.getTrees().shouldHaveSize(2);
-        docsSection.getVersionsTree().shouldNotBe(visible);
+        docsSection.getVersionsTree().find(By.tagName("ul")).shouldNotBe(visible);
         docsSection.getExpandTreePlusMarks().get(0).click();
-        docsSection.getVersionsTree().shouldBe(visible);
+        docsSection.getVersionsTree().find(By.tagName("ul")).shouldBe(visible);
         docsSection.getExpandTreePlusMarks().get(0).click();
-        docsSection.getVersionsTree().shouldNotBe(visible);
+        docsSection.getVersionsTree().find(By.tagName("ul")).shouldNotBe(visible);
         docsSection.getActiveGreenSection().shouldBe(visible);
         assertTrue(docsSection.getCollapseTreeMinusMarks().size() > 0);
         docsSection.getSubnavigationSection().shouldBe(visible);
@@ -442,19 +456,18 @@ public class BackbaseExtranetTest extends BaseTest {
         docsSection.getSubnavigationSection().shouldNotBe(visible);
     }
 
-    private void logout () {
-        open(backbaseUrl + "j_spring_security_logout?portalName=extranet");
-    }
-
-    private void smokeCheckOfDocsSection (LandingBackbase landingBackbase, DocsSection docsSection) {
-        landingBackbase.getDocsLink().click();
-        assertTrue("Page URL doesn't contain '/docs' !", getWebDriver().getCurrentUrl().contains("/docs"));
-        docsSection = page(DocsSection.class);
+    @Title("DOCS : Navigation for Docs")
+    @Test
+    public void testNavigationForDocs () {
+        LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
+        landingBackbase.login(companyUserName, companyUserPassword, false);
+        landingBackbase.getNavBarButton("Docs").click();
+        DocsSection docsSection = page(DocsSection.class);
         docsSection.getNeededDocumentationButton("CXP").click();
-        assertTrue("Page URL doesn't contain '/product-documentation/documentation' !", getWebDriver().getCurrentUrl().contains("/product-documentation/documentation"));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("CXP"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Documentation"))));
+        assertTrue("Page URL doesn't contain '/docs' !", getWebDriver().getCurrentUrl().contains("/docs"));
+        docsSection.getContentLeftPane().shouldBe(present);
+        docsSection.getNumeredSubsection(3).find(By.tagName("ul")).shouldNotBe(visible);
+        docsSection.getNumeredSubsection(3).find(By.tagName("h5")).find(By.tagName("i")).click();
+        System.out.println();
     }
 }

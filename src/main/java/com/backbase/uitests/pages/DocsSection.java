@@ -37,7 +37,7 @@ public class DocsSection extends LandingBackbase {
     private ElementsCollection expandTreePlusMarks;
     @FindBy(css = ".fa-minus-circle")
     private ElementsCollection collapseTreeMinusMarks;
-    @FindBy(css = "div.versions div:nth-child(1) div:nth-child(1) ul:nth-child(2)")
+    @FindBy(css = "div.versions")
     private SelenideElement versionsTree;
     @FindBy(css = "div.active div.active h5.active")
     private SelenideElement activeGreenSection;
@@ -46,5 +46,9 @@ public class DocsSection extends LandingBackbase {
 
     public SelenideElement getNeededDocumentationButton (String sectionTitle) {
         return $(By.xpath("//h3[@class='bd-textContent-dropArea bd-ContentTemplate-para bd-contentArea bd-notEditable' and text()='" + sectionTitle + "']/parent::div/div/div/a"));
+    }
+
+    public SelenideElement getNumeredSubsection (int subsectionTitle) {
+        return $(By.cssSelector("div.tree > div > div.active > div:nth-child(" + subsectionTitle + ")"));
     }
 }

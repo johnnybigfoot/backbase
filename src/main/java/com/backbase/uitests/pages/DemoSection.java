@@ -32,8 +32,8 @@ public class DemoSection extends LandingBackbase {
     private SelenideElement videoContainerPlayButton;
     @FindBy(xpath = "//button[@class='lp-widget-control lp-lightbox-close' and @title='Close']")
     private SelenideElement videoContainerCloseButton;
-    @FindBy(css = "div.lp-lightbox-overlay")
-    private ElementsCollection lightBoxOverlays;
+    @FindBy(xpath = "//div[@class='bb-footer-copyright bd-textContent-dropArea bd-ContentTemplate-para bd-contentArea']")
+    private SelenideElement bottomOfPageAboutSection;
     @FindBy(xpath = "//*[text()='Backbase Showcase Installer']")
     private SelenideElement showcaseInstaller;
     @FindBy(xpath = "//*[text()='Backbase Showcase Archetype']")

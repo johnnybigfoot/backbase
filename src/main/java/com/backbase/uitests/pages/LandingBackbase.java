@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.switchTo;
 
@@ -52,26 +53,16 @@ public class LandingBackbase {
     private SelenideElement logInHereLink;
     @FindBy(xpath = "//a[@href='#sign-up' and text()='Sign Up here!']")
     private SelenideElement signUpInHereLink;
-    @FindBy(xpath = "//a[@role='button' and @href='/demos']")
-    private SelenideElement demosLink;
     @FindBy(xpath = "//a[contains(text(),'Demos') and @class='nav-disabled'][1]")
     private SelenideElement demosLinkForUnlogged;
     @FindBy(xpath = "//ul[@class='nav navbar-nav']")
     private SelenideElement navBar;
-    @FindBy(xpath = "//a[@href='/backbase-showcase']")
-    private SelenideElement showcaseLink;
-    @FindBy(xpath = "//a[@href='/backbase-demo']")
-    private SelenideElement bachbaseDemoSublink;
-    @FindBy(xpath = "//a[@href='/demos/videos' and text()='Videos']")
-    private SelenideElement demosLinkVideoSection;
     @FindBy(xpath = "//ul[@class='bd-breadcrumb breadcrumb']/li")
     private ElementsCollection currentSectionMarks;
-    @FindBy(xpath = "//a[@href='/docs' and @role='button']")
-    private SelenideElement docsLink;
     @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]")
     private ElementsCollection videoSections;
 
-    public void login(String username, String pass, boolean stayLoggedIn) {
+    public void login (String username, String pass, boolean stayLoggedIn) {
         if (!userNameField.has(Condition.visible)) loginLink.click();
         userNameField.sendKeys(username);
         passwordField.sendKeys(pass);
@@ -79,7 +70,7 @@ public class LandingBackbase {
         logInBtn.click();
     }
 
-    public ElementsCollection findElementsAmongAllFrames(String elemXpath) {
+    public ElementsCollection findElementsAmongAllFrames (String elemXpath) {
         switchTo().defaultContent();
         ElementsCollection frames = $$(By.tagName("iframe"));
         for (int i = 0; i < frames.size() - 1; i++) {
@@ -91,11 +82,18 @@ public class LandingBackbase {
         }
         return null;
     }
-
-    public boolean isDemoWidgetContainsText(String text) {
+    public boolean isDemoWidgetContainsText (String text) {
         for (SelenideElement element : videoSections) {
             if (element.has(Condition.hasText(text))) return true;
         }
         return false;
+    }
+
+    public SelenideElement getNavBarButton (String buttonTitle) {
+        return $(By.xpath("//a[@role='button' and contains(text(),'" + buttonTitle + "')]"));
+    }
+
+    public SelenideElement getNavBarButtonsSublink (String buttonTitle, String subsection) {
+        return $(By.xpath("//a[@role='button' and contains(text(),'" + buttonTitle + "')]/parent::*/ul/li/a[text()='" + subsection + "']"));
     }
 }
