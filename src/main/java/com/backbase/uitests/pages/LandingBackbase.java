@@ -66,8 +66,8 @@ public class LandingBackbase {
     private SelenideElement demosLinkVideoSection;
     @FindBy(xpath = "//ul[@class='bd-breadcrumb breadcrumb']/li")
     private ElementsCollection currentSectionMarks;
-    @FindBy(xpath = "//a[@class='btn' and @data-js='docs-link']")
-    private SelenideElement seeAllDocumentationBtn;
+    @FindBy(xpath = "//a[@href='/docs' and @role='button']")
+    private SelenideElement docsLink;
     @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]")
     private ElementsCollection videoSections;
 

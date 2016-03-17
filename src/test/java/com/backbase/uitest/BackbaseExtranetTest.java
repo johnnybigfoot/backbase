@@ -386,7 +386,7 @@ public class BackbaseExtranetTest extends BaseTest {
     public void testCXPDocumentationUI() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(externalUserName, externalUserPassword, false);
-        landingBackbase.getSeeAllDocumentationBtn().click();
+        landingBackbase.getDocsLink().click();
         assertTrue("Page URL doesn't contain '/docs' !", getWebDriver().getCurrentUrl().contains("/docs"));
         DocsSection docsSection = page(DocsSection.class);
         docsSection.getNeededDocumentationButton("CXP").click();
@@ -395,5 +395,13 @@ public class BackbaseExtranetTest extends BaseTest {
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("CXP"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Documentation"))));
+        docsSection.getNextPageBtn().shouldBe(visible);
+        docsSection.getPreviousPageBtn().shouldBe(visible);
+        docsSection.getDownloadAllAsPdfBtn().shouldBe(visible);
+        docsSection.getVersionInfoExpandBtn().shouldBe(visible);
+        docsSection.getVersionInfoExpandBtn().click();
+        docsSection.getExpandedVersionInfo().shouldBe(visible);
+        docsSection.getPrintPageBtn().shouldBe(visible);
+        docsSection.getScrollToTopBtn().shouldBe(visible);
     }
 }
