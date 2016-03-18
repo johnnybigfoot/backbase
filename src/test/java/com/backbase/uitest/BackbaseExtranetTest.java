@@ -174,7 +174,7 @@ public class BackbaseExtranetTest extends BaseTest {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButtonsSublink("Demos", "Videos").click();
+        landingBackbase.getNavBarButton("Demos", "Videos").click();
         assertTrue("Title of page should be 'Videos - My Backbase', but it's: " + title(), title().contains("Videos - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -191,7 +191,7 @@ public class BackbaseExtranetTest extends BaseTest {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButtonsSublink("Demos", "Videos").click();
+        landingBackbase.getNavBarButton("Demos", "Videos").click();
         assertTrue(title().contains("Videos - My Backbase"));
         DemoSection demoSection = page(DemoSection.class);
         assertTrue(demoSection.getVideosPictureSection().stream().allMatch(t -> t.has(containsSubElement("img"))));
@@ -219,12 +219,12 @@ public class BackbaseExtranetTest extends BaseTest {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
         assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
         landingBackbase.getDemosLinkForUnlogged().hover();
-        landingBackbase.getNavBarButtonsSublink("Demos", "Videos").shouldNotBe(present);
+        landingBackbase.getNavBarButton("Demos", "Videos").shouldNotBe(present);
         landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(externalUserName, externalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").shouldBe(visible);
-        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").click();
+        landingBackbase.getNavBarButton("Demos", "Backbase Showcase").shouldBe(visible);
+        landingBackbase.getNavBarButton("Demos", "Backbase Showcase").click();
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getRequestLiveDemoBtn().shouldBe(visible);
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
@@ -265,7 +265,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(externalUserName, externalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").click();
+        landingBackbase.getNavBarButton("Demos", "Backbase Showcase").click();
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getRequestLiveDemoBtn().click();
         demoSection.getRequestLiveDemoForm().shouldBe(visible);
@@ -319,7 +319,7 @@ public class BackbaseExtranetTest extends BaseTest {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Demo").click();
+        landingBackbase.getNavBarButton("Demos", "Backbase Demo").click();
         assertTrue("Page URL doesn't contain '/backbase-demo' !", getWebDriver().getCurrentUrl().contains("backbase-demo"));
         assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
@@ -333,7 +333,7 @@ public class BackbaseExtranetTest extends BaseTest {
         demoSection.getDemoArchetypeLink().shouldBe(visible);
         smokeCheckOfDownloadBtn(demoSection);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").click();
+        landingBackbase.getNavBarButton("Demos", "Backbase Showcase").click();
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -353,7 +353,7 @@ public class BackbaseExtranetTest extends BaseTest {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(partnerUserName, partnerUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Demo").click();
+        landingBackbase.getNavBarButton("Demos", "Backbase Demo").click();
         assertTrue("Page URL doesn't contain '/backbase-demo' !", getWebDriver().getCurrentUrl().contains("backbase-demo"));
         assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
@@ -374,7 +374,7 @@ public class BackbaseExtranetTest extends BaseTest {
         demoSection.getDownloadBtnForWin().shouldNotBe(visible);
         open(baseUrl, LandingBackbase.class);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").click();
+        landingBackbase.getNavBarButton("Demos", "Backbase Showcase").click();
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -478,6 +478,25 @@ public class BackbaseExtranetTest extends BaseTest {
         docsSection.getContentLeftPane().shouldBe(present);
         docsSection.getNumeredSubsection(3).find(By.tagName("ul")).shouldNotBe(visible);
         docsSection.getNumeredSubsection(3).find(By.tagName("h5")).find(By.tagName("i")).click();
-        System.out.println();
+        docsSection.getNumeredSubsection(3).find(By.tagName("ul")).shouldBe(visible);
+        docsSection.getNumeredSubsection(3).find(By.tagName("ul")).find(By.tagName("li")).find(By.tagName("a")).click();
+        docsSection.getNumeredSubsection(2).find(By.tagName("ul")).shouldNotBe(visible);
+        docsSection.getNumeredSubsection(1).find(By.tagName("ul")).shouldNotBe(visible);
+        docsSection.getNumeredSubsection(3).find(By.tagName("ul")).shouldBe(visible);
+        docsSection.getNumeredSubsection(3).find(By.cssSelector("h5.active")).shouldBe(visible);
+        docsSection.getNumeredSubsection(3).find(By.tagName("ul")).find(By.cssSelector("li.active")).shouldBe(visible);
+    }
+
+    @Title("DOCS : Archive")
+    @Test
+    public void testDocsArchive() {
+        LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
+        landingBackbase.login(companyUserName, companyUserPassword, false);
+        DocsSection docsSection = page(DocsSection.class);
+        landingBackbase.getNavBarButton("Docs").hover();
+        landingBackbase.getNavBarButton("Docs", "Product Documentation").hover();
+        landingBackbase.getNavBarButton("Docs", "Product Documentation", "Documentation Archive").click();
+        switchTo().window("Backbase Documentation Archive");
+        assertTrue("Title of page should be 'Backbase Documentation Archive', but it's: " + title(), title().contains("Backbase Documentation Archive"));
     }
 }

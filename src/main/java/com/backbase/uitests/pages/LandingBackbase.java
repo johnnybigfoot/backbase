@@ -94,7 +94,11 @@ public class LandingBackbase {
         return $(By.xpath("//a[@role='button' and contains(text(),'" + buttonTitle + "')]"));
     }
 
-    public SelenideElement getNavBarButtonsSublink (String buttonTitle, String subsection) {
+    public SelenideElement getNavBarButton(String buttonTitle, String subsection) {
         return $(By.xpath("//a[@role='button' and contains(text(),'" + buttonTitle + "')]/parent::*/ul/li/a[contains(text(),'" + subsection + "')]"));
+    }
+
+    public SelenideElement getNavBarButton(String buttonTitle, String subsection, String lastSection) {
+        return $(By.xpath("//a[@role='button' and contains(text(),'" + buttonTitle + "')]/parent::*/ul/li/a[contains(text(),'" + subsection + "')]/following-sibling::ul/li/a[contains(text(),'" + lastSection + "')]"));
     }
 }
