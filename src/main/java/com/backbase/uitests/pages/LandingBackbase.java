@@ -10,9 +10,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.*;
 
 /**
  * Created by eugene.salmin on 2/02/2016.
@@ -61,6 +59,9 @@ public class LandingBackbase {
     private ElementsCollection currentSectionMarks;
     @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]")
     private ElementsCollection videoSections;
+    /////////////////////////////////////////
+//    @FindBy(xpath = "//a[@href='/backbase-showcase']")
+//    private SelenideElement showcaseLink;
 
     public void login (String username, String pass, boolean stayLoggedIn) {
         if (!userNameField.has(Condition.visible)) loginLink.click();
@@ -94,6 +95,6 @@ public class LandingBackbase {
     }
 
     public SelenideElement getNavBarButtonsSublink (String buttonTitle, String subsection) {
-        return $(By.xpath("//a[@role='button' and contains(text(),'" + buttonTitle + "')]/parent::*/ul/li/a[text()='" + subsection + "']"));
+        return $(By.xpath("//a[@role='button' and contains(text(),'" + buttonTitle + "')]/parent::*/ul/li/a[contains(text(),'" + subsection + "')]"));
     }
 }

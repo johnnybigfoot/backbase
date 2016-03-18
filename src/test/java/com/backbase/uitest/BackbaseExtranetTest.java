@@ -36,11 +36,11 @@ public class BackbaseExtranetTest extends BaseTest {
 //    @Rule
 //    public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
 
-    private void logout () {
+    private void logout() {
         open(backbaseUrl + "j_spring_security_logout?portalName=extranet");
     }
 
-    private void smokeCheckOfDocsSection (LandingBackbase landingBackbase, DocsSection docsSection) {
+    private void smokeCheckOfDocsSection(LandingBackbase landingBackbase, DocsSection docsSection) {
         landingBackbase.getNavBarButton("Docs").click();
         assertTrue("Page URL doesn't contain '/docs' !", getWebDriver().getCurrentUrl().contains("/docs"));
         docsSection.getNeededDocumentationButton("CXP").click();
@@ -51,8 +51,23 @@ public class BackbaseExtranetTest extends BaseTest {
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Documentation"))));
     }
 
+    private void smokeCheckOfDownloadBtn(DemoSection demoSection) {
+        while (!demoSection.getDownloadBtnForMac().is(visible)) {
+            demoSection.getDownloadBtn().click();
+        }
+        while (demoSection.getDownloadBtnForMac().is(visible)) {
+            demoSection.getDownloadBtn().click();
+        }
+        while (!demoSection.getDownloadBtnForWin().is(visible)) {
+            demoSection.getDownloadBtn().click();
+        }
+        while (demoSection.getDownloadBtnForWin().is(visible)) {
+            demoSection.getDownloadBtn().click();
+        }
+    }
+
     @Before
-    public void overrideSelenideConfig () {
+    public void overrideSelenideConfig() {
         timeout = driverTimeoutInSeconds * 1000;
         baseUrl = backbaseUrl;
         startMaximized = true;
@@ -65,7 +80,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Company user (partner or client")
     @Test
-    public void testCompanyUserShouldLogin () {
+    public void testCompanyUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(companyUserName, companyUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(companyUserName));
@@ -73,7 +88,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Login error")
     @Test
-    public void testLoginShouldFail () {
+    public void testLoginShouldFail() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.getLoginLink().click();
         landingBackbase.getLogInBtn().click();
@@ -93,7 +108,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : External user (not a partner/company, not internal")
     @Test
-    public void testExternalUserShouldLogin () {
+    public void testExternalUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(externalUserName, externalUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(externalUserName));
@@ -101,7 +116,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Internal user (@backbase address)")
     @Test
-    public void testInternalUserShouldLogin () {
+    public void testInternalUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(internalUserName));
@@ -109,7 +124,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Company user (partner or client)")
     @Test
-    public void testPartnerUserShouldLogin () {
+    public void testPartnerUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(partnerUserName, partnerUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(partnerUserName));
@@ -117,7 +132,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Support user")
     @Test
-    public void testSupportUserShouldLogin () {
+    public void testSupportUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(supportUserName, supportUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(supportUserName));
@@ -125,7 +140,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Login : Training user")
     @Test
-    public void testTrainingUserShouldLogin () {
+    public void testTrainingUserShouldLogin() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(trainingUserName, trainingUserPassword, false);
         landingBackbase.getUserProfileMenu().shouldHave(text(trainingUserName));
@@ -133,7 +148,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("Logout elements accessibility")
     @Test
-    public void testLogoutView () {
+    public void testLogoutView() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.getLoginLink().shouldBe(visible);
         landingBackbase.getSignUpLink().shouldBe(visible);
@@ -143,7 +158,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("AUTH : Navigation between login, signup, reset password tabs")
     @Test
-    public void testTabsNavigation () {
+    public void testTabsNavigation() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.getSignUpLink().click();
         landingBackbase.getLogInHereLink().click();
@@ -155,7 +170,7 @@ public class BackbaseExtranetTest extends BaseTest {
     //TODO Maybe, add new widgets in DEMOs content?
     @Title("DEMOS : Videos Content - Availability depending on user type")
     @Test
-    public void testDemosForInternalUsers () {
+    public void testDemosForInternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
@@ -172,7 +187,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DEMOS : Videos UI")
     @Test
-    public void testDemoUIForInternalUsers () {
+    public void testDemoUIForInternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
@@ -191,7 +206,7 @@ public class BackbaseExtranetTest extends BaseTest {
         demoSection.getActiveVideoContainer().shouldNotBe(visible);
         demoSection.getWatchConferenceButtons().get(0).click();
         demoSection.getActiveVideoContainer().shouldHave(containsSubElementByXpath("/descendant::button[@title='Close']"));
-        demoSection.getBottomOfPageAboutSection().click();
+        demoSection.getLightBoxOverlays().get(0).click();
         demoSection.getActiveVideoContainer().shouldNotBe(visible);
         assertTrue(demoSection.getVideosTextSection().stream().anyMatch(t -> t.has(text("URL to State Session"))));
         assertTrue(demoSection.getVideosTextSection().stream().anyMatch(t -> t.has(text("CXP Mobile SDK"))));
@@ -200,15 +215,16 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DEMOS : external user (not a partner, not internal)")
     @Test
-    public void testDemoUIForExternalUsers () {
+    public void testDemoUIForExternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
         assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
         landingBackbase.getDemosLinkForUnlogged().hover();
         landingBackbase.getNavBarButtonsSublink("Demos", "Videos").shouldNotBe(present);
         landingBackbase = open(baseUrl, LandingBackbase.class);
-        landingBackbase.getNavBarButton("Backbase Showcase").shouldBe(visible);
-        landingBackbase.getNavBarButton("Backbase Showcase").click();
         landingBackbase.login(externalUserName, externalUserPassword, false);
+        landingBackbase.getNavBarButton("Demos").hover();
+        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").shouldBe(visible);
+        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").click();
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getRequestLiveDemoBtn().shouldBe(visible);
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
@@ -243,12 +259,13 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DEMOS : external user (not a partner, not internal)")
     @Test
-    public void testDemoUIForExternalUsersForm () {
+    public void testDemoUIForExternalUsersForm() {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
         assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
         landingBackbase = open(baseUrl, LandingBackbase.class);
-        landingBackbase.getNavBarButton("Backbase Showcase").click();
         landingBackbase.login(externalUserName, externalUserPassword, false);
+        landingBackbase.getNavBarButton("Demos").hover();
+        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").click();
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getRequestLiveDemoBtn().click();
         demoSection.getRequestLiveDemoForm().shouldBe(visible);
@@ -298,7 +315,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DEMOS : internal user (@backbase address)")
     @Test
-    public void testDemoForInternalUsers () {
+    public void testDemoForInternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
@@ -314,15 +331,9 @@ public class BackbaseExtranetTest extends BaseTest {
         demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
         demoSection.getDemoInstallerLink().shouldBe(visible);
         demoSection.getDemoArchetypeLink().shouldBe(visible);
-        demoSection.getDownloadBtn().click();  //TODO Make this thing stable
-        demoSection.getDownloadBtnForMac().shouldBe(visible);
-        demoSection.getDownloadBtnForWin().shouldBe(visible);
-        demoSection.getDownloadBtn().shouldBe(visible);
-        demoSection.getDownloadBtn().click();
-        demoSection.getDownloadBtnForMac().shouldNotBe(visible);
-        demoSection.getDownloadBtnForWin().shouldNotBe(visible);
+        smokeCheckOfDownloadBtn(demoSection);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButton("Backbase Showcase").click();
+        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").click();
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -338,7 +349,7 @@ public class BackbaseExtranetTest extends BaseTest {
     @Title("DEMO : partner user")
     @Description("Part of test was removed from original DEMOS_demo_partner.html because it duplicates previous test logic - empty fields validation")
     @Test
-    public void testDemoForPartnerUsers () {
+    public void testDemoForPartnerUsers() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(partnerUserName, partnerUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
@@ -363,8 +374,7 @@ public class BackbaseExtranetTest extends BaseTest {
         demoSection.getDownloadBtnForWin().shouldNotBe(visible);
         open(baseUrl, LandingBackbase.class);
         landingBackbase.getNavBarButton("Demos").hover();
-        landingBackbase.getNavBarButton("Backbase Showcase").shouldBe(visible);
-        landingBackbase.getNavBarButton("Backbase Showcase").click();
+        landingBackbase.getNavBarButtonsSublink("Demos", "Backbase Showcase").click();
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -398,7 +408,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DOCS : CXP Documentation UI")
     @Test
-    public void testCXPDocumentationUI () {
+    public void testCXPDocumentationUI() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(companyUserName, companyUserPassword, false);
         landingBackbase.getNavBarButton("Docs").click();
@@ -458,7 +468,7 @@ public class BackbaseExtranetTest extends BaseTest {
 
     @Title("DOCS : Navigation for Docs")
     @Test
-    public void testNavigationForDocs () {
+    public void testNavigationForDocs() {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(companyUserName, companyUserPassword, false);
         landingBackbase.getNavBarButton("Docs").click();
