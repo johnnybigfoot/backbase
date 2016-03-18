@@ -1,9 +1,6 @@
 package com.backbase.uitest;
 
-import com.backbase.uitests.pages.DemoSection;
-import com.backbase.uitests.pages.DocsSection;
-import com.backbase.uitests.pages.LandingBackbase;
-import com.backbase.uitests.pages.RequestDemoForm;
+import com.backbase.uitests.pages.*;
 import com.codeborne.selenide.ElementsCollection;
 import org.junit.Before;
 import org.junit.Test;
@@ -498,5 +495,36 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getNavBarButton("Docs", "Product Documentation", "Documentation Archive").click();
         switchTo().window("Backbase Documentation Archive");
         assertTrue("Title of page should be 'Backbase Documentation Archive', but it's: " + title(), title().contains("Backbase Documentation Archive"));
+    }
+
+    @Title("DOCS : Extensions page UI")
+    @Test
+    public void testDocExtensionUI() {
+        LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
+        landingBackbase.login(companyUserName, companyUserPassword, false);
+        landingBackbase.getNavBarButton("Docs").hover();
+        landingBackbase.getNavBarButton("Docs", "Product Extensions").hover();
+        landingBackbase.getNavBarButton("Docs", "Product Extensions", "Extensions").click();
+        ExtensionsSection extensionsSection = page(ExtensionsSection.class);
+        assertTrue("Title of page should be 'Extensions - My Backbase', but it's: " + title(), title().contains("Extensions - My Backbase"));
+        assertTrue("Page URL doesn't contain '/extensions' !", getWebDriver().getCurrentUrl().contains("/extensions"));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Product Extensions"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Extensions"))));
+        extensionsSection.getCarousel().shouldBe(visible);
+        extensionsSection.getBanner(1).shouldBe(visible);
+        extensionsSection.getBanner(2).shouldBe(visible);
+        extensionsSection.getBanner(3).shouldBe(visible);
+        extensionsSection.getNavTilesWidget().shouldBe(visible);
+        extensionsSection.getNavTitles().stream().forEach(w -> w.shouldBe(visible));
+        int numOfTiles = extensionsSection.getNavTitles().size();
+        int numOfTileImages = extensionsSection.getNavTitleImages().size();
+        int numOfTileHeaders = extensionsSection.getNavTitleHeaders().size();
+        int numOfTileSubtitles = extensionsSection.getNavTitleSubtitles().size();
+        int numOfTileDescr = extensionsSection.getNavTitleDescr().size();
+        assertTrue(numOfTiles == 10);
+        assertTrue((numOfTileDescr == numOfTiles) && (numOfTileHeaders == numOfTiles) && (numOfTileImages == numOfTiles) && (numOfTileSubtitles == numOfTiles));
+        //need to finish this test
     }
 }
