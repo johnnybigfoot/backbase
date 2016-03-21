@@ -1,5 +1,7 @@
 package com.backbase.uitest;
 
+import com.backbase.conditions.PredicateTitleContains;
+import com.backbase.conditions.PredicateURLContains;
 import com.backbase.uitests.pages.*;
 import com.codeborne.selenide.ElementsCollection;
 import org.junit.Before;
@@ -8,12 +10,14 @@ import org.openqa.selenium.By;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Title;
 
+import java.util.Random;
+
 import static com.backbase.conditions.BackbaseCondition.*;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.url;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -39,9 +43,9 @@ public class BackbaseExtranetTest extends BaseTest {
 
     private void smokeCheckOfDocsSection(LandingBackbase landingBackbase, DocsSection docsSection) {
         landingBackbase.getNavBarButton("Docs").click();
-        assertTrue("Page URL doesn't contain '/docs' !", getWebDriver().getCurrentUrl().contains("/docs"));
+        assertTrue("Page URL doesn't contain '/docs' !", url().contains("/docs"));
         docsSection.getNeededDocumentationButton("CXP").click();
-        assertTrue("Page URL doesn't contain '/product-documentation/documentation' !", getWebDriver().getCurrentUrl().contains("/product-documentation/documentation"));
+        assertTrue("Page URL doesn't contain '/product-documentation/documentation' !", url().contains("/product-documentation/documentation"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("CXP"))));
@@ -150,7 +154,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getLoginLink().shouldBe(visible);
         landingBackbase.getSignUpLink().shouldBe(visible);
         landingBackbase.getSpanDisplayName().shouldNotBe(present);
-        assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains("/home"));
+        assertTrue("Page URL doesn't contain '/home' !", url().contains("/home"));
     }
 
     @Title("AUTH : Navigation between login, signup, reset password tabs")
@@ -159,9 +163,9 @@ public class BackbaseExtranetTest extends BaseTest {
         LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.getSignUpLink().click();
         landingBackbase.getLogInHereLink().click();
-        assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains("home#login"));
+        assertTrue("Page URL doesn't contain '/home' !", url().contains("home#login"));
         landingBackbase.getSignUpInHereLink().click();
-        assertTrue("Page URL doesn't contain '/home' !", getWebDriver().getCurrentUrl().contains("home#sign-up"));
+        assertTrue("Page URL doesn't contain '/home' !", url().contains("home#sign-up"));
     }
 
     //TODO Maybe, add new widgets in DEMOs content?
@@ -214,7 +218,7 @@ public class BackbaseExtranetTest extends BaseTest {
     @Test
     public void testDemoUIForExternalUsers() {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
-        assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
+        assertTrue("Page URL doesn't contain '/login-register' !", url().contains("login-register"));
         landingBackbase.getDemosLinkForUnlogged().hover();
         landingBackbase.getNavBarButton("Demos", "Videos").shouldNotBe(present);
         landingBackbase = open(baseUrl, LandingBackbase.class);
@@ -258,7 +262,7 @@ public class BackbaseExtranetTest extends BaseTest {
     @Test
     public void testDemoUIForExternalUsersForm() {
         LandingBackbase landingBackbase = open(baseUrl + "backbase-demo", LandingBackbase.class);
-        assertTrue("Page URL doesn't contain '/login-register' !", getWebDriver().getCurrentUrl().contains("login-register"));
+        assertTrue("Page URL doesn't contain '/login-register' !", url().contains("login-register"));
         landingBackbase = open(baseUrl, LandingBackbase.class);
         landingBackbase.login(externalUserName, externalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
@@ -317,7 +321,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.login(internalUserName, internalUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
         landingBackbase.getNavBarButton("Demos", "Backbase Demo").click();
-        assertTrue("Page URL doesn't contain '/backbase-demo' !", getWebDriver().getCurrentUrl().contains("backbase-demo"));
+        assertTrue("Page URL doesn't contain '/backbase-demo' !", url().contains("backbase-demo"));
         assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -351,7 +355,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.login(partnerUserName, partnerUserPassword, false);
         landingBackbase.getNavBarButton("Demos").hover();
         landingBackbase.getNavBarButton("Demos", "Backbase Demo").click();
-        assertTrue("Page URL doesn't contain '/backbase-demo' !", getWebDriver().getCurrentUrl().contains("backbase-demo"));
+        assertTrue("Page URL doesn't contain '/backbase-demo' !", url().contains("backbase-demo"));
         assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
@@ -471,7 +475,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getNavBarButton("Docs").click();
         DocsSection docsSection = page(DocsSection.class);
         docsSection.getNeededDocumentationButton("CXP").click();
-        assertTrue("Page URL doesn't contain '/docs' !", getWebDriver().getCurrentUrl().contains("/docs"));
+        assertTrue("Page URL doesn't contain '/docs' !", url().contains("/docs"));
         docsSection.getContentLeftPane().shouldBe(present);
         docsSection.getNumeredSubsection(3).find(By.tagName("ul")).shouldNotBe(visible);
         docsSection.getNumeredSubsection(3).find(By.tagName("h5")).find(By.tagName("i")).click();
@@ -507,24 +511,37 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getNavBarButton("Docs", "Product Extensions", "Extensions").click();
         ExtensionsSection extensionsSection = page(ExtensionsSection.class);
         assertTrue("Title of page should be 'Extensions - My Backbase', but it's: " + title(), title().contains("Extensions - My Backbase"));
-        assertTrue("Page URL doesn't contain '/extensions' !", getWebDriver().getCurrentUrl().contains("/extensions"));
+        assertTrue("Page URL doesn't contain '/extensions' !", url().contains("/extensions"));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Product Extensions"))));
         assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Extensions"))));
         extensionsSection.getCarousel().shouldBe(visible);
-        extensionsSection.getBanner(1).shouldBe(visible);
-        extensionsSection.getBanner(2).shouldBe(visible);
-        extensionsSection.getBanner(3).shouldBe(visible);
+        extensionsSection.getBanner(1).shouldBe(present);
+        extensionsSection.getBanner(2).shouldBe(present);
+        extensionsSection.getBanner(3).shouldBe(present);
         extensionsSection.getNavTilesWidget().shouldBe(visible);
-        extensionsSection.getNavTitles().stream().forEach(w -> w.shouldBe(visible));
-        int numOfTiles = extensionsSection.getNavTitles().size();
-        int numOfTileImages = extensionsSection.getNavTitleImages().size();
-        int numOfTileHeaders = extensionsSection.getNavTitleHeaders().size();
-        int numOfTileSubtitles = extensionsSection.getNavTitleSubtitles().size();
-        int numOfTileDescr = extensionsSection.getNavTitleDescr().size();
+        extensionsSection.getNavTiles().stream().forEach(w -> w.shouldBe(visible));
+        int numOfTiles = extensionsSection.getNavTiles().size();
+        int numOfTileImages = extensionsSection.getNavTileImages().size();
+        int numOfTileHeaders = extensionsSection.getNavTileHeaders().size();
+        int numOfTileSubtitles = extensionsSection.getNavTileSubtitles().size();
+        int numOfTileDescr = extensionsSection.getNavTileDescr().size();
         assertTrue(numOfTiles == 10);
         assertTrue((numOfTileDescr == numOfTiles) && (numOfTileHeaders == numOfTiles) && (numOfTileImages == numOfTiles) && (numOfTileSubtitles == numOfTiles));
-        //need to finish this test
+        extensionsSection.getNavTileContents().get(new Random().nextInt(extensionsSection.getNavTileContents().size() - 1)).click();
+        Wait().until(new PredicateURLContains("product-extensions/extensions/"));
+        assertTrue("Title of page should be 'product-extensions/extensions/', but it's: " + url(), url().contains("product-extensions/extensions/"));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Product Extensions"))));
+        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Extensions"))));
+        extensionsSection.getExtensionDetailsWidget().shouldBe(visible);
+        String articleTitle = extensionsSection.getExtensionDetailsWidget().find(By.cssSelector("div.details-holder")).find(By.cssSelector("h1")).getText();
+        assertTrue(title().equals(articleTitle + " - My Backbase"));
+        extensionsSection.getHowToSection().shouldBe(visible);
+        landingBackbase.getCurrentSectionMarks().find(matchesText("Extensions")).click();
+        Wait().until(new PredicateTitleContains("Extensions - My Backbase"));
+        assertTrue("Title of page should be 'Extensions - My Backbase', but it's: " + title(), title().contains("Extensions - My Backbase"));
     }
 }
