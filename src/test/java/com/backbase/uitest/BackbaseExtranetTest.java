@@ -583,5 +583,6 @@ public class BackbaseExtranetTest extends BaseTest {
         docsSection.getSubnavigationSection().shouldNotBe(visible);
         docsSection.getActiveGreenSection().find(By.tagName("i")).click();
         docsSection.getSubnavigationSection().shouldBe(visible);
+        System.out.println(); //TODO remove such thing: assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
     }
 }
