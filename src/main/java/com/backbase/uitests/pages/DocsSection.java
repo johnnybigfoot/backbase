@@ -43,6 +43,8 @@ public class DocsSection extends LandingBackbase {
     private SelenideElement activeGreenSection;
     @FindBy(xpath = "//div[@class='active']/ul")
     private SelenideElement subnavigationSection;
+    @FindBy(css = "div.bb2doc-book")
+    private SelenideElement contentBlock;
 
     public SelenideElement getNeededDocumentationButton (String sectionTitle) {
         return $(By.xpath("//h3[@class='bd-textContent-dropArea bd-ContentTemplate-para bd-contentArea bd-notEditable' and text()='" + sectionTitle + "']/parent::div/div/div/a"));
