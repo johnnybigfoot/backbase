@@ -545,4 +545,43 @@ public class BackbaseExtranetTest extends BaseTest {
         Wait().until(new PredicateTitleContains("Extensions - My Backbase"));
         assertTrue("Title of page should be 'Extensions - My Backbase', but it's: " + title(), title().contains("Extensions - My Backbase"));
     }
+
+    @Title("DOCS : Forms Documentation UI")
+    @Test
+    public void testFormsDocumentationUI() {
+        LandingBackbase landingBackbase = open(baseUrl, LandingBackbase.class);
+        landingBackbase.login(companyUserName, companyUserPassword, false);
+        landingBackbase.getNavBarButton("Docs").hover();
+        landingBackbase.getNavBarButton("Docs", "Product Documentation").hover();
+        landingBackbase.getNavBarButton("Docs", "Product Documentation", "Forms Documentation").click();
+        Wait().until(new PredicateURLContains("docs/product-documentation/documentation"));
+        DocsSection docsSection = page(DocsSection.class);
+        docsSection.getContentBlock().shouldBe(visible);
+        docsSection.getVersionsTree().find(By.cssSelector("h5:nth-child(1)")).shouldHave(text("Forms"));
+        docsSection.getPreviousPageBtn().shouldBe(visible);
+        docsSection.getNextPageBtn().shouldBe(visible);
+        docsSection.getDownloadAllAsPdfBtn().shouldBe(visible);
+        docsSection.getVersionInfoExpandBtn().shouldBe(visible);
+        docsSection.getVersionInfoExpandBtn().click();
+        docsSection.getExpandedVersionInfo().shouldBe(visible);
+        docsSection.getPrintPageBtn().shouldBe(visible);
+        docsSection.getScrollToTopBtn().shouldBe(visible);
+        docsSection.getContentLeftPane().shouldBe(present);
+        assertTrue(docsSection.getExpandTreePlusMarks().size() > 0);
+        docsSection.getVersionsTree().find(By.cssSelector("ul:nth-child(2)")).shouldNotBe(visible);
+        docsSection.getExpandTreePlusMarks().get(0).click();
+        docsSection.getVersionsTree().find(By.cssSelector("ul:nth-child(2)")).shouldBe(visible);
+        docsSection.getExpandTreePlusMarks().get(0).click();
+        docsSection.getVersionsTree().find(By.cssSelector("ul:nth-child(2)")).shouldNotBe(visible);
+        docsSection.getActiveGreenSection().shouldBe(visible);
+        assertTrue(docsSection.getCollapseTreeMinusMarks().size() > 0);
+        docsSection.getSubnavigationSection().shouldBe(visible);
+        docsSection.getActiveGreenSection().find(By.tagName("i")).click();
+        docsSection.getSubnavigationSection().shouldNotBe(visible);
+        docsSection.getActiveGreenSection().shouldBe(visible);
+        docsSection.getActiveGreenSection().find(By.tagName("i")).shouldBe(visible);
+        docsSection.getSubnavigationSection().shouldNotBe(visible);
+        docsSection.getActiveGreenSection().find(By.tagName("i")).click();
+        docsSection.getSubnavigationSection().shouldBe(visible);
+    }
 }
