@@ -18,15 +18,21 @@ public class ExtensionsSection extends LandingBackbase {
     @FindBy(css = "div.widget-extensions-nav-tiles")
     private SelenideElement navTilesWidget;
     @FindBy(css = "li.sr-nav-link-wrapper > div.tile-wrapper")
-    private ElementsCollection navTitles;
+    private ElementsCollection navTiles;
     @FindBy(xpath = "//div[@class='widget-extensions-nav-tiles']/div/ul/li/div/a/img")
-    private ElementsCollection navTitleImages;
+    private ElementsCollection navTileImages;
     @FindBy(xpath = "//div[@class='widget-extensions-nav-tiles']/div/ul/li/div/a/h3")
-    private ElementsCollection navTitleHeaders;
+    private ElementsCollection navTileHeaders;
     @FindBy(xpath = "//div[@class='widget-extensions-nav-tiles']/div/ul/li/div/a/h5")
-    private ElementsCollection navTitleSubtitles;
+    private ElementsCollection navTileSubtitles;
     @FindBy(xpath = "//div[@class='widget-extensions-nav-tiles']/div/ul/li/div/a/p")
-    private ElementsCollection navTitleDescr;
+    private ElementsCollection navTileDescr;
+    @FindBy(css = "div.tile-wrapper > a.sr-nav-link")
+    private ElementsCollection navTileContents;
+    @FindBy(css = "div.widget-extensions-details")
+    private SelenideElement extensionDetailsWidget;
+    @FindBy(xpath = "//div[@class='bd-textContent-dropArea bd-ContentTemplate-para bd-contentArea']/h3[text()='HOW TO']")
+    private SelenideElement howToSection;
 
     public SelenideElement getBanner(int bannerIndex) {
         return $(By.cssSelector("div.owl-item:nth-child(" + bannerIndex + ") > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1)"));
