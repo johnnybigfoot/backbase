@@ -49,7 +49,7 @@ public class BaseTest {
         browser = browserName;
 //        browser = "chrome";
 //        remote = "http://localhost:4444/wd/hub";
-//        remote = "http://grid.backbasecloud.com:4444//wd/hub";
+        remote = "http://grid.backbasecloud.com:4444//wd/hub";
         clearBrowserCache();
     }
 
