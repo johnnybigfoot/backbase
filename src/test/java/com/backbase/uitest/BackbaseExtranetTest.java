@@ -46,10 +46,7 @@ public class BackbaseExtranetTest extends BaseTest {
         assertTrue("Page URL doesn't contain '/docs' !", url().contains("/docs"));
         docsSection.getNeededDocumentationButton("CXP").click();
         assertTrue("Page URL doesn't contain '/product-documentation/documentation' !", url().contains("/product-documentation/documentation"));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("CXP"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Documentation"))));
+        assertTrue(isBreadcrumbContainsTexts(landingBackbase, "Home", "Docs", "Product Documentation"));
     }
 
     private void smokeCheckOfDownloadBtn(DemoSection demoSection) {
@@ -177,9 +174,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getNavBarButton("Demos").hover();
         landingBackbase.getNavBarButton("Demos", "Videos").click();
         assertTrue("Title of page should be 'Videos - My Backbase', but it's: " + title(), title().contains("Videos - My Backbase"));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Videos"))));
+        assertTrue(isBreadcrumbContainsTexts(landingBackbase, "Home", "Demos", "Videos"));
         DemoSection demoSection = page(DemoSection.class);
         assertTrue(demoSection.getVideoSections().stream().anyMatch(t -> t.has(hasText("Backbase Connect Internal Keynote"))));
         assertTrue(demoSection.getVideoSections().stream().anyMatch(t -> t.has(hasText("CXP Mobile SDK"))));
@@ -228,9 +223,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getNavBarButton("Demos", "Backbase Showcase").click();
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getRequestLiveDemoBtn().shouldBe(visible);
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Showcase"))));
+        assertTrue(isBreadcrumbContainsTexts(landingBackbase, "Home", "Demos", "Backbase Showcase"));
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
         demoSection.getDownloadBtn().shouldNotBe(present);
         demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
@@ -323,9 +316,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getNavBarButton("Demos", "Backbase Demo").click();
         assertTrue("Page URL doesn't contain '/backbase-demo' !", url().contains("backbase-demo"));
         assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Demo"))));
+        assertTrue(isBreadcrumbContainsTexts(landingBackbase, "Home", "Demos", "Backbase Demo"));
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getDownloadBtn().shouldBe(visible);
         demoSection.getRequestLiveDemoBtn().shouldNotBe(visible);
@@ -336,9 +327,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getNavBarButton("Demos").hover();
         landingBackbase.getNavBarButton("Demos", "Backbase Showcase").click();
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Showcase"))));
+        assertTrue(isBreadcrumbContainsTexts(landingBackbase, "Home", "Demos", "Backbase Showcase"));
         demoSection.getDownloadBtn().shouldBe(visible);
         demoSection.getRequestLiveDemoBtn().shouldNotBe(visible);
         demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
@@ -357,9 +346,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getNavBarButton("Demos", "Backbase Demo").click();
         assertTrue("Page URL doesn't contain '/backbase-demo' !", url().contains("backbase-demo"));
         assertTrue("Title of page should be 'Backbase Demo - My Backbase', but it's: " + title(), title().contains("Backbase Demo - My Backbase"));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Demo"))));
+        assertTrue(isBreadcrumbContainsTexts(landingBackbase, "Home", "Demos", "Backbase Demo"));
         DemoSection demoSection = page(DemoSection.class);
         demoSection.getDownloadBtn().shouldBe(visible);
         demoSection.getRequestLiveDemoBtn().shouldNotBe(visible);
@@ -377,9 +364,7 @@ public class BackbaseExtranetTest extends BaseTest {
         landingBackbase.getNavBarButton("Demos").hover();
         landingBackbase.getNavBarButton("Demos", "Backbase Showcase").click();
         assertTrue("Title of page should be 'Backbase Showcase - My Backbase', but it's: " + title(), title().contains("Backbase Showcase - My Backbase"));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Demos"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Backbase Showcase"))));
+        assertTrue(isBreadcrumbContainsTexts(landingBackbase, "Home", "Demos", "Backbase Showcase"));
         demoSection.getRequestLiveDemoBtn().shouldBe(visible);
         demoSection.getDownloadBtn().shouldBe(present);
         demoSection.getRequestLiveDemoForm().shouldNotBe(visible);
@@ -512,10 +497,7 @@ public class BackbaseExtranetTest extends BaseTest {
         ExtensionsSection extensionsSection = page(ExtensionsSection.class);
         assertTrue("Title of page should be 'Extensions - My Backbase', but it's: " + title(), title().contains("Extensions - My Backbase"));
         assertTrue("Page URL doesn't contain '/extensions' !", url().contains("/extensions"));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Product Extensions"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Extensions"))));
+        assertTrue(isBreadcrumbContainsTexts(landingBackbase, "Home", "Docs", "Product Extensions", "Extensions"));
         extensionsSection.getCarousel().shouldBe(visible);
         extensionsSection.getBanner(1).shouldBe(present);
         extensionsSection.getBanner(2).shouldBe(present);
@@ -532,10 +514,7 @@ public class BackbaseExtranetTest extends BaseTest {
         extensionsSection.getNavTileContents().get(new Random().nextInt(extensionsSection.getNavTileContents().size() - 1)).click();
         Wait().until(new PredicateURLContains("product-extensions/extensions/"));
         assertTrue("Title of page should be 'product-extensions/extensions/', but it's: " + url(), url().contains("product-extensions/extensions/"));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Home"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Product Extensions"))));
-        assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Extensions"))));
+        assertTrue(isBreadcrumbContainsTexts(landingBackbase, "Home", "Docs", "Product Extensions", "Extensions"));
         extensionsSection.getExtensionDetailsWidget().shouldBe(visible);
         String articleTitle = extensionsSection.getExtensionDetailsWidget().find(By.cssSelector("div.details-holder")).find(By.cssSelector("h1")).getText();
         Wait().until(new PredicateTitleContains(articleTitle));
@@ -583,6 +562,5 @@ public class BackbaseExtranetTest extends BaseTest {
         docsSection.getSubnavigationSection().shouldNotBe(visible);
         docsSection.getActiveGreenSection().find(By.tagName("i")).click();
         docsSection.getSubnavigationSection().shouldBe(visible);
-        System.out.println(); //TODO remove such thing: assertTrue(landingBackbase.getCurrentSectionMarks().stream().anyMatch(m -> m.has(text("Docs"))));
     }
 }

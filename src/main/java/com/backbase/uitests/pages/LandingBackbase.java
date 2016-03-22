@@ -59,9 +59,10 @@ public class LandingBackbase {
     private ElementsCollection currentSectionMarks;
     @FindBy(xpath = "//div[contains(@class,'bb-widget-common-content')]")
     private ElementsCollection videoSections;
-    /////////////////////////////////////////
-//    @FindBy(xpath = "//a[@href='/backbase-showcase']")
-//    private SelenideElement showcaseLink;
+
+    public ElementsCollection getCurrentSectionMarks() {
+        return $$(By.xpath("//ul[@class='bd-breadcrumb breadcrumb']/li"));
+    }
 
     public void login (String username, String pass, boolean stayLoggedIn) {
         if (!userNameField.has(Condition.visible)) loginLink.click();
